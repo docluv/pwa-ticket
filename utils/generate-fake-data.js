@@ -1,6 +1,10 @@
 const fs = require("fs"),
     path = require("path"),
     faker = require("faker"),
+    ba64 = require("ba64"),
+    utils = require("./utils"),
+    qr = require('qr-encode'),
+    barCodePath = path.resolve("../www/public/barcodes/"),
     utf8 = "utf-8";
 
 
@@ -15,6 +19,7 @@ db.futureEvents = [];
 db.pastEvents = [];
 db.tickets = [];
 db.users = [];
+db.contacts = [];
 
 let count = 0;
 
@@ -27,6 +32,21 @@ function getClaims() {
 
 }
 
+function generateBarCode(id) {
+
+    let dataURI = qr(id, {
+        type: 6,
+        size: 6,
+        level: 'Q'
+    });
+
+    //    fs.writeFileSync(barCodePath + "/" + id + ".gif", dataURI, 'base64');
+
+    ba64.writeImageSync(barCodePath + "/" + id + ".gif", dataURI);
+
+    return id + ".gif";
+}
+
 function generateEvents(future) {
 
     let eventCount = faker.random.number(100) + 10;
@@ -34,18 +54,22 @@ function generateEvents(future) {
 
     future = !!future;
 
-    for (count = 0; count < eventCount; count++) {
+    for (let count = 0; count < eventCount; count++) {
 
-        events.push({
+        let event = {
             "id": faker.random.uuid(),
             "image": faker.image.image(),
-            "date": future ? faker.date.future() : faker.date.past(),
+            "date": future ? faker.date.future().toDateString() : faker.date.past().toDateString(),
             "venue": faker.company.companyName(),
             "title": faker.commerce.productName(),
             "city": faker.address.city(),
             "state": faker.address.state(),
             "tickets": []
-        });
+        }
+
+        event["available-tickets"] = future ? getAvailableTickets(event) : [];
+
+        events.push(event);
 
     }
 
@@ -71,6 +95,45 @@ function getRandomEvent(future) {
 
 }
 
+function getAvailableTickets(event) {
+
+    let ticketCount = faker.random.number(20);
+    let tickets = [];
+
+    for (let count = 0; count < ticketCount; count++) {
+
+        tickets.push(getTicket(event));
+
+    }
+
+    return tickets;
+
+}
+
+function getTicket(event) {
+
+    let _event = Object.assign({}, event);
+
+    let id = faker.random.uuid();
+
+    delete _event["available-tickets"];
+
+    let ticket = {
+        "id": id,
+        "event": _event,
+        "date": _event.date,
+        "price": faker.commerce.price(),
+        "barcode": generateBarCode(id),
+        "section": Math.abs(faker.random.number(400) - 100),
+        "row": Math.random().toString(36).replace(/[^a-z]+/g, '')[0].toUpperCase(),
+        "seat": faker.random.number(36) + 1
+    };
+
+
+    return ticket;
+
+}
+
 function generateUserTickets(user) {
 
     let ticketCount = faker.random.number(20);
@@ -81,15 +144,7 @@ function generateUserTickets(user) {
         let future = faker.random.boolean();
         let event = getRandomEvent(future);
 
-        let ticket = {
-            "id": faker.random.uuid(),
-            "event": event,
-            "date": event.date,
-            "price": faker.commerce.price(),
-            "section": Math.abs(faker.random.number(400) - 100),
-            "row": Math.random().toString(36).replace(/[^a-z]+/g, '')[0].toUpperCase(),
-            "seat": faker.random.number(36) + 1
-        };
+        let ticket = getTicket(event);
 
         addTicketToEvent(ticket, event, future);
 
@@ -126,11 +181,11 @@ function addTicketToEvent(ticket, event, future) {
 
     if (future) {
 
-        for (let count = 0; count < db.futureEvents.length; count++){
+        for (let count = 0; count < db.futureEvents.length; count++) {
 
-            if(db.futureEvents[count].id = event.id){
+            if (db.futureEvents[count].id = event.id) {
 
-                db.futureEvents[count].tickets.push(ticket); 
+                db.futureEvents[count].tickets.push(ticket);
                 count = db.futureEvents.length;
 
             }
@@ -139,11 +194,11 @@ function addTicketToEvent(ticket, event, future) {
 
     } else {
 
-        for (let count = 0; count < db.pastEvents.length; count++){
+        for (let count = 0; count < db.pastEvents.length; count++) {
 
-            if(db.pastEvents[count].id = event.id){
+            if (db.pastEvents[count].id = event.id) {
 
-                db.pastEvents[count].tickets.push(ticket); 
+                db.pastEvents[count].tickets.push(ticket);
                 count = db.pastEvents.length;
 
             }
@@ -153,6 +208,11 @@ function addTicketToEvent(ticket, event, future) {
     }
 
 }
+
+//clean bar codes
+
+utils.removeDirForce(barCodePath + "/");
+utils.MakeDirectory(barCodePath);
 
 db.pastEvents = generateEvents(false);
 db.futureEvents = generateEvents(true);

@@ -17,6 +17,8 @@
         "glob": "*",
         "lodash": "*",
         "strip-bom": "*",
-        "mkdirp": "*"
+        "mkdirp": "*",
+        "qr-encode": "*",
+        "ba64": "*"
     }
 }

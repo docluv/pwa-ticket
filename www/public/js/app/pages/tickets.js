@@ -1,68 +1,33 @@
 (function () {
 
-    function loadTicketListTemplate() {
-
-        return fetch("templates/ticket-list.html")
-            .then(function (response) {
-
-                if (response.ok) {
-
-                    return response.text()
-                        .then(function (template) {
-
-                            return template;
-
-                        });
-
-                }
-
-                return;
-
-            })
-
-    }
-
+    var userId;
 
     function getTickets() {
 
-        return fetch(window.pwaTickets.api + "users/8a4a30d7-2e36-43b8-9f8f-ef249fec0731")
-            .then(function (response) {
-
-                if (response.ok) {
-
-                    return response.json()
-                        .then(function (user) {
-
-                            return user.tickets;
-
-                        });
-
-
-                } else {
-
-                    throw "event fetch failed";
-                }
-
-            });
+        return pwaTicketAPI.getUserTickets("e2beca0c-609d-4b0b-a2ba-bf42b6194f06");
 
     }
 
-    loadTicketListTemplate()
-        .then(function(template){
+    pwaTicketAPI.loadTemplate("templates/ticket-list.html")
+        .then(function (template) {
 
-            getTickets()
-            .then(function(tickets){
-    
-                var target = _d.qs(".content-target");
+            if (template) {
 
-                target.innerHTML = Mustache.render(template, {
-                    tickets: tickets
-                });
-    
-            });
-    
+                getTickets()
+                    .then(function (tickets) {
+
+                        var target = _d.qs(".content-target");
+
+                        target.innerHTML = Mustache.render(template, {
+                            tickets: tickets
+                        });
+
+                    });
+
+            }
+
         })
-        .catch(function(err){
+        .catch(function (err) {
 
             console.log(err);
 

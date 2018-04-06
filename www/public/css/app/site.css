@@ -19,6 +19,7 @@ body {
     padding: 1%;
     top: 100px;
     min-height: 320px;
+    margin-bottom: 100px;
 }
 
 .page-content .card {
@@ -225,28 +226,32 @@ body {
     margin: 2% 0;
 }
 
+.page-content .ticket-card{
+    width: 98%;
+}
+
+.ticket-barcode{
+    max-width: 380px;
+}
 
 @media (min-width: 768px) {
     .page-content .card {
         width: 46%;
     }
+
+    .page-content .ticket-card{
+        width: 98%;
+    }
+    
 }
 
 @media (min-width: 992px) {
 
-    .navbar-expand-lg .navbar-collapse, 
-    .navbar-collapse{
-        display: none!important;
-    }
-    
     .authenticated .navbar-expand-lg .navbar-collapse, 
     .authenticated .navbar-collapse{
         display: flex!important;
     }
     
-    .page-content {
-        margin-left: 320px;
-    }
     .session-detail {
         padding: 1%;
     }
@@ -257,9 +262,20 @@ body {
         transform: translateX(0);
         padding-top: 1%;
     }
+
+    .page-content .content-target{
+        width:98%;
+    }   
+
     .page-content .card {
         width: 30%;
     }
+
+
+    .page-content .ticket-card{
+        width: 98%;
+    }
+    
 }
 
 /* search */

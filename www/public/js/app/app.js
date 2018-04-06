@@ -2,6 +2,14 @@
 
 (function () {
 
+//    https://stackoverflow.com/questions/10064975/mustache-js-date-formatting
+    Mustache.Formatters = {
+        date: function( str) {
+          var dt = new Date( parseInt( str.substr(6, str.length-8), 10));
+          return (dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear());
+        }
+      };
+
     var eventListTemplate,
         ticketListTemplate,
         authToken = "auth-token";
@@ -17,9 +25,9 @@
 
                     return;
 
-                // } else {
+                    // } else {
 
-                //     window.location = "login/";
+                    //     window.location = "login/";
 
                 }
 
@@ -64,7 +72,6 @@
 
     }
 
-
     /* search */
     function initSearch() {
 
@@ -96,28 +103,9 @@
 
     }
 
-    /* session card template */
-
-    function fetchTemplate() {
-
-        return fetch(url)
-            .then(function (response) {
-
-                if (response.ok) {
-
-                    return response.text();
-
-                }
-
-                return;
-
-            })
-
-    }
-
     function loadSearchTemplates() {
 
-        fetchTemplate("templates/event-list")
+        pwaTicketAPI.fetchTemplate("templates/event-list")
             .then(function (template) {
 
                 if (template) {
@@ -129,7 +117,7 @@
                 return;
             });
 
-        fetchTemplate("templates/ticket-list")
+        pwaTicketAPI.fetchTemplate("templates/ticket-list")
             .then(function (template) {
 
                 if (template) {
@@ -146,9 +134,25 @@
     initializeApp();
 
     window.pwaTickets = {
-        "api": "http://localhost:15501/"
+        "api": "http://localhost:15501/",
+
+        getParameterByName: function (name, url) {
+            if (!url) {
+                url = window.location.href;
+            }
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
     };
 
+    /*
+        register the service worker
+    */
     if ('serviceWorker' in navigator) {
 
         navigator.serviceWorker.register('/sw.js').then(function (registration) {

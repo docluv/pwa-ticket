@@ -109,12 +109,67 @@ module.exports = {
 
     },
 
-    readJSON: function(src){
+    readJSON: function (src) {
 
         let body = fs.readFileSync(src, utf8);
-        
+
         return JSON.parse(body);
 
+    },
+
+    //https://gist.githubusercontent.com/liangzan/807712/raw/1175dbe60b94cc9601c99a674a7f94d08e7421da/recursiveRemoveFiles.js
+    // path should have trailing slash
+    removeDirForce: function (dirPath) {
+
+        fs.readdir(dirPath, function (err, files) {
+            if (err) {
+                console.log(JSON.stringify(err));
+            } else {
+
+                if (files.length === 0) {
+
+                    fs.rmdir(dirPath, function (err) {
+
+                        if (err) {
+                            console.log(JSON.stringify(err));
+                        } else {
+                            var parentPath = path.normalize(dirPath + '/..') + '/';
+                            if (parentPath != path.normalize(rootPath)) {
+                                removeDirForce(parentPath);
+                            }
+                        }
+
+                    });
+
+                } else {
+
+                    files.forEach(function (file) {
+
+                        var filePath = dirPath + file;
+
+                        fs.stat(filePath, function (err, stats) {
+
+                            if (err) {
+                                console.log(JSON.stringify(err));
+                            } else {
+
+                                if (stats.isFile()) {
+                                    fs.unlink(filePath, function (err) {
+                                        if (err) {
+                                            console.log(JSON.stringify(err));
+                                        }
+                                    });
+                                }
+
+                                if (stats.isDirectory()) {
+                                    removeDirForce(filePath + '/');
+                                }
+                            }
+                        });
+                    });
+                }
+            }
+        });
     }
 
 };

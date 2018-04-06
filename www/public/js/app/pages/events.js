@@ -8,7 +8,7 @@ var pwaEvents = (function () {
 
             var self = this;
 
-            return fetch(window.pwaTickets.api + "users/8a4a30d7-2e36-43b8-9f8f-ef249fec0731/events")
+            return fetch(window.pwaTickets.api + "users/e2beca0c-609d-4b0b-a2ba-bf42b6194f06/events")
                 .then(function (response) {
 
                     if (response.ok) {
