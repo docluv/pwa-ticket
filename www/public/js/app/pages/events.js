@@ -1,226 +1,28 @@
-var pwaEvents = (function () {
+(function () {
 
-    var userEvents = "user-events";
+    pwaTicketAPI.loadTemplate("templates/event-list.html")
+        .then(function (template) {
 
-    var pwaEvents = {
+            if (template) {
 
-        getEvents: function () {
+                pwaTicketAPI.getFutureEvents()
+                    .then(function (events) {
 
-            var self = this;
+                        var target = _d.qs(".content-target");
 
-            return fetch(window.pwaTickets.api + "users/e2beca0c-609d-4b0b-a2ba-bf42b6194f06/events")
-                .then(function (response) {
-
-                    if (response.ok) {
-
-                        return response.json()
-                            .then(function (events) {
-
-                                self.campSchedule = events;
-
-                                return events;
-
-                            });
-
-
-                    } else {
-
-                        throw "event fetch failed";
-                    }
-
-                });
-
-        },
-
-        saveevent: function (id) {
-
-            var self = this;
-
-            return this.geteventById(id)
-                .then(function (event) {
-
-                    return self.getSavedevents()
-                        .then(function (events) {
-
-                            events = events || [];
-
-                            //this can stack up duplicates so need to fix...but I am tired.
-                            events.push(event);
-
-                            return localforage.setItem(savesevents, events);
-
+                        target.innerHTML = Mustache.render(template, {
+                            events: events
                         });
 
-                });
-
-        },
-
-        removeevent: function (id) {
-
-            var self = this;
-
-            return this.getSavedevents()
-                .then(function (events) {
-
-                    if (events.length > 0) {
-
-                        events = events.filter(function (event) {
-
-                            return event.id != id;
-
-                        });
-
-                        return localforage.setItem(savesevents, events);
-
-                    }
-
-                });
-
-        },
-
-        geteventById: function (id) {
-
-            id = parseInt(id, 10);
-
-            return this.getEvents()
-                .then(function (events) {
-
-                    var _s = events.filter(function (event) {
-
-                        return event.id === id;
-
                     });
 
-                    if (_s && _s.length > 0) {
+            }
 
-                        return _s[0];
+        })
+        .catch(function (err) {
 
-                    } else {
-                        return undefined;
-                    }
+            console.log(err);
 
-                });
-
-        },
-
-        searchevents: function (term) {
-
-            var self = this;
-
-            term = term.toLowerCase();
-
-            return new Promise(function (resolve, reject) {
-
-                var results = self.campSchedule.filter(function (event) {
-
-                    return ((event.title.toLowerCase().indexOf(term) > -1 ||
-                            event.body.toLowerCase().indexOf(term) > -1 ||
-                            event.speaker.toLowerCase().indexOf(term) > -1) &&
-                        event.date.indexOf("2018-03-24") > -1);
-
-                });
-
-                resolve(results);
-
-            });
-
-        },
-
-        getSavedevents: function () {
-
-            return localforage.getItem(savesevents);
-
-        },
-
-        getSelectedTimes: function () {
-
-            var self = this;
-
-            return localforage.getItem(userEvents)
-                .then(function (times) {
-
-                    if (!times) {
-
-                        return self.updateeventTimes(self.selectedTimes)
-                            .then(function () {
-
-                                return self.selectedTimes;
-
-                            });
-
-                    }
-
-                    return times;
-
-                });
-
-        },
-
-        addeventTime: function (eventTime) {
-
-            var self = this;
-
-            return self.getSelectedTimes()
-                .then(function (times) {
-
-                    times.push(eventTime);
-
-                    return self.updateeventTimes(times);
-
-                });
-
-        },
-
-        removeeventTime: function (eventTime) {
-
-            var self = this;
-
-            return self.getSelectedTimes()
-                .then(function (times) {
-
-                    times = times.filter(function (time) {
-
-                        return time != eventTime;
-
-                    });
-
-                    return self.updateeventTimes(times);
-
-                });
-
-        },
-
-        updateeventTimes: function (times) {
-
-            return localforage.setItem(userEvents, times);
-
-        },
-
-        geteventTimes: function () {
-
-            return localforage.getItem(userEvents);
-
-        },
-
-        getFacetedevents: function () {
-
-            var self = this;
-
-            return self.getSelectedTimes()
-                .then(function (times) {
-
-                    return self.campSchedule.filter(function (event) {
-
-                        return times.indexOf(event.time) > -1;
-
-                    });
-
-                });
-
-        }
-
-    }
-
-    return pwaEvents;
+        });
 
 })();

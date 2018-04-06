@@ -102,7 +102,11 @@ function getAvailableTickets(event) {
 
     for (let count = 0; count < ticketCount; count++) {
 
-        tickets.push(getTicket(event));
+        let ticket = Object.assign({}, getTicket(event));
+
+        delete ticket.event;
+
+        tickets.push(ticket);
 
     }
 
@@ -144,7 +148,9 @@ function generateUserTickets(user) {
         let future = faker.random.boolean();
         let event = getRandomEvent(future);
 
-        let ticket = getTicket(event);
+        let ticket = Object.assign({}, getTicket(event));
+
+        delete ticket.event;
 
         addTicketToEvent(ticket, event, future);
 
@@ -158,7 +164,7 @@ function generateUserTickets(user) {
 
         db.tickets.push(user_ticket);
 
-        delete ticket.event.tickets;
+//        delete ticket.event.tickets;
 
         tickets.push(ticket);
 

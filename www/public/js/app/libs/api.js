@@ -75,9 +75,54 @@ var pwaTicketAPI = (function () {
                 });
 
         },
+
         getUser: function (userId) {
 
             return fetch(window.pwaTickets.api + "users/" + userId)
+                .then(function (response) {
+
+                    if (response.ok) {
+
+                        return response.json();
+
+                    } else {
+
+                        throw "user tickets fetch failed";
+                    }
+
+                });
+
+        },
+   
+        getFutureEvents: function () {
+
+            return fetch(window.pwaTickets.api + "futureEvents/")
+                .then(function (response) {
+
+                    if (response.ok) {
+
+                        return response.json();
+
+                    } else {
+
+                        throw "user tickets fetch failed";
+                    }
+
+                });
+
+        },
+
+        getEvent: function (id, future) {
+
+            if(future === undefined) {
+
+                future = true;
+
+            }
+
+            let timeFrame = future ? "futureEvents/" : "pastEvents/";
+
+            return fetch(window.pwaTickets.api + timeFrame + id)
                 .then(function (response) {
 
                     if (response.ok) {

@@ -7,7 +7,7 @@
 
             if (template) {
 
-                pwaTicketAPI.getUserTicket("e2beca0c-609d-4b0b-a2ba-bf42b6194f06",
+                pwaTicketAPI.getUserTicket(pwaTicket.token,
                 pwaTickets.getParameterByName("id"))
                     .then(function (ticket) {
 
