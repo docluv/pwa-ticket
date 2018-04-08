@@ -2,12 +2,14 @@
 
 self.importScripts("js/libs/localforage.min.js",
     "js/libs/mustache.min.js",
-    "js/app/libs/api.js"
+    "js/app/libs/api.js", "sw/response-mgr.js", "sw/push-mgr.js",
+    "sw/invalidation-mgr.js", "sw/date-mgr.js"
 );
 
-const version = "1.03",
+const version = "1.04",
     preCache = "PRECACHE-" + version,
     dynamicCache = "DYNAMIC-" + version,
+    eventsCacheName = "events-cache-" + version,
     cacheList = [
         "/",
         "img/pwa-tickets-logo-320x155.png",
@@ -29,6 +31,21 @@ const version = "1.03",
 
 /*  Service Worker Event Handlers */
 
+function getCacheName(url) {
+
+    var cacheName = dynamicCache;
+  
+    if (/\/event\//.test(url)) {
+  
+      cacheName = eventsCacheName;
+  
+    }
+  
+    return cacheName;
+  
+  }
+  
+
 self.addEventListener("install", event => {
 
     self.skipWaiting();
@@ -36,9 +53,9 @@ self.addEventListener("install", event => {
     console.log("Installing the service worker!");
 
     caches.open(preCache)
-        .then(function (cache) {
+        .then(cache => {
 
-            cache.addAll(cacheList);
+            return cache.addAll(cacheList);
 
         });
 
@@ -49,75 +66,76 @@ self.addEventListener("activate", event => {
     event.waitUntil(
 
         caches.keys().then(cacheNames => {
-          cacheNames.forEach(value => {
-    
-            if (value.indexOf(version) < 0) {
-              caches.delete(value);
-            }
-    
-          });
-    
-          console.log("service worker activated");
-    
-          return;
-    
-        })
-    
-      );
-    
-});
+            cacheNames.forEach(value => {
 
-self.addEventListener("fetch", event => {
-
-    event.respondWith(
-        caches.match(event.request)
-            .then(function (response) {
-
-                if (response) {
-                    return response;
+                if (value.indexOf(version) < 0) {
+                    caches.delete(value);
                 }
 
-                return fetch(event.request)
-                    .then(response => {
+            });
 
-                        if (response.ok || response.status === 0) {
+            console.log("service worker activated");
 
-                            //I have no clue why the chrome extensions requests are passed through the SW
-                            //but I don't like the error messages in the console ;)
-                            if (event.request.url.indexOf("chrome-extension") === -1) {
+            return;
 
-                                let copy = response.clone();
+        })
 
-                                //if it was not in the cache it must be added to the dynamic cache
-                                caches.open(dynamicCache)
-                                    .then(cache => {
-                                        cache.put(event.request, copy);
-                                    });
-
-                            }
-
-                            return response;
-
-                        }
-
-                    }).catch(err => {
-
-                        if (err.message === "Failed to fetch") {
-
-                            if (event.request.url.indexOf("session") > -1) {
-
-                                return renderSession(event);
-
-                            }
-
-                        }
-
-                    });
-            })
     );
 
 });
 
+self.addEventListener("fetch", event => {
+
+    let cacheName = getCacheName(event.request.url);
+
+    event.respondWith(
+        caches.match(event.request)
+        .then(function (response) {
+
+            if (response) {
+                return response;
+            }
+
+            return fetch(event.request)
+                .then(response => {
+
+                    if (response.ok || response.status === 0) {
+
+                        //I have no clue why the chrome extensions requests are passed through the SW
+                        //but I don't like the error messages in the console ;)
+                        if (event.request.url.indexOf("chrome-extension") === -1) {
+
+                            let copy = response.clone();
+
+                            //if it was not in the cache it must be added to the dynamic cache
+                            caches.open(dynamicCache)
+                                .then(cache => {
+                                    cache.put(event.request, copy);
+                                });
+
+                        }
+
+                        return response;
+
+                    }
+
+                }).catch(err => {
+
+                    if (err.message === "Failed to fetch") {
+
+                        if (event.request.url.indexOf("session") > -1) {
+
+                            return renderSession(event);
+
+                        }
+
+                    }
+
+                });
+        })
+    );
+
+});
 
 function getAppShell() {
 
@@ -138,50 +156,6 @@ function getAppShell() {
 
 }
 
-function getSessionTemplate() {
-
-    return fetch("templates/session.html")
-        .then(response => {
-
-            if (response.ok) {
-
-                return response.text()
-                    .then(html => {
-
-                        return html;
-
-                    });
-            }
-
-        });
-
-}
-
-function getSessionBySlug(slug) {
-
-    return fetch("api/philly-cc-schedule.json")
-        .then(response => {
-
-            return response.json()
-
-        })
-        .then(sessions => {
-
-            let session = sessions.filter(ses => {
-
-                return ses.slug === slug;
-
-            });
-
-            if (session.length > 0) {
-
-                return session[0];
-
-            }
-
-        });
-
-}
 
 function getSlug(url) {
 
@@ -197,55 +171,3 @@ function getSlug(url) {
     return slug[index];
 
 }
-
-function renderSession(event) {
-
-    let slug = getSlug(event.request.url),
-        appShell = "",
-        sessionTemplate = "";
-
-    return getAppShell()
-        .then(html => {
-
-            appShell = html;
-
-        })
-        .then(() => {
-
-            return getSessionTemplate()
-                .then(html => {
-
-                    sessionTemplate = html;
-
-                });
-
-        }).then(() => {
-
-            let sessionShell = appShell.replace("<%template%>", sessionTemplate);
-
-            return getSessionBySlug(slug)
-                .then((session) => {
-
-                    let sessionPage = Mustache.render(sessionShell, session);
-
-                    //make custom response
-                    let response = new Response(sessionPage, {
-                        headers: {
-                            'content-type': 'text/html'
-                        }
-                    }),
-                        copy = response.clone();
-
-                    caches.open(dynamicCache)
-                        .then(cache => {
-                            cache.put(event.request, copy);
-                        });
-
-                    return response;
-
-                });
-
-        });
-
-};
-

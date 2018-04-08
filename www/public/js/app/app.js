@@ -7,7 +7,6 @@
         authToken = "auth-token";
 
     window.pwaTickets = {
-        "api": "http://localhost:15501/",
 
         getParameterByName: function (name, url) {
             if (!url) {
@@ -23,32 +22,6 @@
 
     };
 
-
-    function verifyToken() {
-
-        return localforage.getItem(authToken)
-            .then(function (token) {
-
-                //temporary
-                token = "e2beca0c-609d-4b0b-a2ba-bf42b6194f06";
-
-                if (token) {
-
-                    pwaTickets.token = token;
-
-                    document.body.classList.add("authenticated");
-
-                    return token;
-
-                    // } else {
-
-                    //     window.location = "login/";
-
-                }
-
-            });
-
-    }
 
     // Menu toggle
     function initMenuToggle() {
@@ -136,17 +109,26 @@
 
     function initializeApp() {
 
-        verifyToken()
-            .then(function (token) {
+        if (window.location.href.indexOf("login") === -1) {
 
-                if(token){
+            pwaTicketAPI.verifyToken()
+                .then(function (token) {
 
-                    initSearch();
-                    initMenuToggle();
+                    if (token) {
 
-                }
+                        document.body.classList.add("authenticated");
 
-            });
+                        initSearch();
+                        initMenuToggle();
+
+                    } else {
+
+                        window.location.href = "login";
+                    }
+
+                });
+
+        }
 
     }
 

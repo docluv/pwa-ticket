@@ -7,6 +7,26 @@ const fs = require("fs"),
     barCodePath = path.resolve("../www/public/barcodes/"),
     utf8 = "utf-8";
 
+    const venues = [
+        "concert-1.jpg",
+        "concert-2.jpg",
+        "concert-3.jpg",
+        "concert-4.jpg",
+        "stadium-1.jpg",
+        "stadium-2.jpg",
+        "stadium-3.jpg",
+        "stadium-4.jpg"
+    ],
+    mugshots = [
+        "avtar-1.jpg",
+        "avtar-2.jpg",
+        "avtar-3.jpg",
+        "avtar-4.jpg",
+        "avtar-5.jpg",
+        "avtar-6.jpg",
+        "avtar-7.jpg",
+        "avtar-8.jpg"
+    ];
 
 //read content/article
 let db = fs.readFileSync(path.resolve("../db.json"), utf8);
@@ -42,7 +62,7 @@ function generateBarCode(id) {
 
     //    fs.writeFileSync(barCodePath + "/" + id + ".gif", dataURI, 'base64');
 
-    ba64.writeImageSync(barCodePath + "/" + id + ".gif", dataURI);
+    ba64.writeImageSync(barCodePath + "/" + id, dataURI);
 
     return id + ".gif";
 }
@@ -56,9 +76,11 @@ function generateEvents(future) {
 
     for (let count = 0; count < eventCount; count++) {
 
+        let venue = faker.random.number(8) - 1;
+
         let event = {
             "id": faker.random.uuid(),
-            "image": faker.image.image(),
+            "image": venues[venue],
             "date": future ? faker.date.future().toDateString() : faker.date.past().toDateString(),
             "venue": faker.company.companyName(),
             "title": faker.commerce.productName(),
@@ -150,7 +172,8 @@ function generateUserTickets(user) {
 
         let ticket = Object.assign({}, getTicket(event));
 
-        delete ticket.event;
+        delete ticket.event.tickets;
+        delete ticket.user;
 
         addTicketToEvent(ticket, event, future);
 
@@ -227,11 +250,13 @@ db.futureEvents = generateEvents(true);
 //fake users
 for (count = 0; count < faker.random.number(100); count++) {
 
+    let mugshot = faker.random.number(8) - 1;
+
     let user = {
         "id": faker.random.uuid(),
         "firstName": faker.name.firstName(),
         "lastName": faker.name.lastName(),
-        "mugshot": faker.image.people(),
+        "mugshot": mugshots[mugshot],
         "userName": faker.internet.userName(),
         "password": faker.internet.password(),
         "streetAddress": faker.address.streetAddress(),

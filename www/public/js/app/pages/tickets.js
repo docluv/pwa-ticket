@@ -4,7 +4,12 @@
 
     function getTickets() {
 
-        return pwaTicketAPI.getUserTickets("e2beca0c-609d-4b0b-a2ba-bf42b6194f06");
+        return pwaTicketAPI.verifyToken()
+            .then(function(token){
+
+                return pwaTicketAPI.getUserTickets(token.id);
+
+            });
 
     }
 

@@ -2,7 +2,7 @@
 
     var userId;
 
-    pwaTicketAPI.loadTemplate("templates/ticket.html")
+    pwaTicketAPI.loadTemplate("templates/cart.html")
         .then(function (template) {
 
             if (template) {
@@ -10,8 +10,8 @@
                 return pwaTicketAPI.verifyToken()
                     .then(function (token) {
 
-                        pwaTicketAPI.getUserTicket(token.id,
-                                pwaTickets.getParameterByName("id"))
+                        pwaTicketAPI.getEventTicket(pwaTickets.getParameterByName("eventid"), 
+                            pwaTickets.getParameterByName("ticketid"))
                             .then(function (ticket) {
 
                                 var target = _d.qs(".content-target");

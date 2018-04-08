@@ -20,6 +20,8 @@ function loadAppShell() {
 
 function renderPage(page) {
 
+    console.log(page);
+
     let body = fs.readFileSync(path.resolve(page), utf8),
         slug = path.basename(page, ".html"),
         pageObj = utils.readJSON(path.resolve("public/" + slug + ".json")),
