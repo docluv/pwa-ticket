@@ -38,6 +38,24 @@ var pwaTicketAPI = (function () {
 
         },
 
+        searchFutureEvents: function (term) {
+
+            return fetch(api + "futureEvents?q=" + term)
+                .then(function (response) {
+
+                    if (response.ok) {
+
+                        return response.json();
+
+                    } else {
+
+                        throw "user tickets fetch failed";
+                    }
+
+                });
+
+        },
+
         getUserTickets: function (userId) {
 
             return fetch(api + "users/" + userId)
@@ -111,41 +129,41 @@ var pwaTicketAPI = (function () {
         getEventTicket: function (eventId, ticketId) {
 
             return fetch(api + "futureEvents/" + eventId)
-            .then(function (response) {
+                .then(function (response) {
 
-                if (response.ok) {
+                    if (response.ok) {
 
-                    return response.json()
-                        .then(function (event) {
+                        return response.json()
+                            .then(function (event) {
 
-                            var ticket = event["available-tickets"].filter(function (tick) {
+                                var ticket = event["available-tickets"].filter(function (tick) {
 
-                                return (tick.id === ticketId);
+                                    return (tick.id === ticketId);
+
+                                });
+
+                                ticket = ticket[0];
+
+                                ticket.event = {
+                                    "id": event.id,
+                                    "title": event.title,
+                                    "venue": event.venue,
+                                    "date": event.date,
+                                    "city": event.city,
+                                    "state": event.state,
+                                    "image": event.image
+                                };
+
+                                return ticket;
 
                             });
 
-                            ticket = ticket[0];
+                    } else {
 
-                            ticket.event = {
-                                "id": event.id,
-                                "title": event.title,
-                                "venue": event.venue,
-                                "date": event.date,
-                                "city": event.city,
-                                "state": event.state,
-                                "image": event.image
-                            };
+                        throw "user tickets fetch failed";
+                    }
 
-                            return ticket;
-
-                        });
-
-                } else {
-
-                    throw "user tickets fetch failed";
-                }
-
-            });
+                });
 
         },
 
@@ -201,10 +219,10 @@ var pwaTicketAPI = (function () {
                     if (response.ok) {
 
                         return response.json()
-                            .then(function(event){
+                            .then(function (event) {
 
                                 //update the tickets
-                                for(var i = 0; i < event["available-tickets"].length; i++){
+                                for (var i = 0; i < event["available-tickets"].length; i++) {
 
                                     event["available-tickets"][i].eventid = event.id;
 
@@ -225,23 +243,54 @@ var pwaTicketAPI = (function () {
 
         postContact: function (contact) {
 
-            return fetch({
+            return fetch(api + "contacts/", {
                 "method": "POST",
-                "Content-Type": "application/json",
-                "body": JSON.stringify(contact),
-                "url": api + "contacts/"
+                "cache": 'no-cache',
+                "headers": {
+                    'content-type': 'application/json'
+                },
+                "mode": "cors",
+                "body": JSON.stringify(contact)
             });
 
         },
 
-        buyTicket: function (ticket, user) {
+        updateUser: function (user) {
 
             return fetch({
                 "method": "POST",
                 "Content-Type": "application/json",
-                "body": JSON.stringify(contact),
-                "url": api + "contacts/"
+                "body": JSON.stringify(user),
+                "url": api + "users/"
             });
+
+        },
+
+        buyTicket: function (ticket) {
+
+            var self = this;
+
+            return self.verifyToken()
+                .then(function (token) {
+
+                    // return self.getUserTickets(token.id)
+                    //     .then(function (tickets) {
+
+                    //         tickets.push(ticket);
+
+                            return fetch(api + "user/" + token.id + "/tickets/", {
+                                "method": "POST",
+                                "cache": 'no-cache',
+                                "headers": {
+                                    'content-type': 'application/json'
+                                },
+                                "mode": "cors",
+                                "body": JSON.stringify(ticket)
+                            });
+
+//                        });
+
+                });
 
         },
 
@@ -263,7 +312,7 @@ var pwaTicketAPI = (function () {
 
                         //     window.location = "login/";
 
-                    }else{
+                    } else {
 
                         window.location.href = "login";
                     }
@@ -303,7 +352,16 @@ var pwaTicketAPI = (function () {
 
         },
 
-        logout: function () {}
+        logout: function () {
+
+            localforage.removeItem(authToken)
+                .then(function () {
+
+                    window.location.href = "login";
+
+                });
+
+        }
 
     };
 

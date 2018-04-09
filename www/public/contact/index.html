@@ -61,14 +61,15 @@
     <div class="navbar navbar-expand-lg navbar-light bg-light fixed-top " role="navigation">
         <div class="navbar-header">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-            aria-label="Toggle navigation">
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
         <div>
             <a class="navbar-brand" href="/">
-                <img srcset="img/pwa-tickets-logo-1158x559.png 1158w,img/pwa-tickets-logo-700x338.png 700w,img/pwa-tickets-logo-570x276.png 570w,img/pwa-tickets-logo-533x258.png 533w,img/pwa-tickets-logo-460x223.png 460w,img/pwa-tickets-logo-320x155.png 320w" 
-                    class="navbar-logo" src="img/pwa-tickets-logo-1158x559.png" sizes="(max-width: 480px) 40vw, (max-width: 720px) 20vw, 10vw" alt="pwa-tickets-logo">
+                <img srcset="img/pwa-tickets-logo-1158x559.png 1158w,img/pwa-tickets-logo-700x338.png 700w,img/pwa-tickets-logo-570x276.png 570w,img/pwa-tickets-logo-533x258.png 533w,img/pwa-tickets-logo-460x223.png 460w,img/pwa-tickets-logo-320x155.png 320w"
+                    class="navbar-logo" src="img/pwa-tickets-logo-1158x559.png" sizes="(max-width: 480px) 40vw, (max-width: 720px) 20vw, 10vw"
+                    alt="pwa-tickets-logo">
             </a>
         </div>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -87,6 +88,9 @@
                         <i class="fa fa-cog" aria-hidden="true"></i>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <button class="logout-btn btn-primary btn-outline-info my-2 my-sm-0" type="submit">Logout</button>
+                </li>
             </ul>
             <form class="form-inline my-2 my-lg-0 flex-nowrap">
                 <input class="form-control mr-sm-2 search-input" type="search" placeholder="Search" aria-label="Search">
@@ -96,7 +100,53 @@
     </div>
 
     <main class="page-content content-target">
-        <h1>contact</h1>
+        <div class="contact-panel">
+    <div class="section">
+        <div class="container">
+            <div class="space"></div>
+            <h1>Get in Touch</h1>
+            <div class="separator-2"></div>
+            <p class="lead">We are available to assess your business needs & help you create the best solution. If you want more information,
+                we’d love to hear from you.</p>
+            <p class="lead">Call (919) 251-5067 to get the conversation started, or complete the form below and we’ll connect with you shortly.
+            </p>
+        </div>
+    </div>
+    <div class="col-md-6 col-md-offset-3">
+        <div class="contact-form">
+            <form id="contact-form-with-recaptcha" role="form" name="contact-form">
+                <div class="form-group has-feedback">
+                    <label for="name">Name*</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="" required autofocus>
+                    <i class="fa fa-user form-control-feedback"></i>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="email">Email*</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="" required>
+                    <i class="fa fa-envelope form-control-feedback"></i>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="subject">Subject*</label>
+                    <input type="text" class="form-control" id="subject" name="subject" placeholder="">
+                    <i class="fa fa-navicon form-control-feedback"></i>
+                </div>
+                <div class="form-group has-feedback">
+                    <label for="message">Message*</label>
+                    <textarea class="form-control" required rows="6" id="message" name="message" placeholder=""></textarea>
+                    <i class="fa fa-pencil form-control-feedback"></i>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Submit" class="btn-contact-submit submit-button btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="confimation-panel invisible">
+
+    <h1>Success</h1>
+    <p>We have received your request and will respond as soon as possible.</p>
+</div>
     </main>
 
     <footer class="main-footer">
@@ -105,8 +155,9 @@
                 <div class="col-md-4 col-sm-6">
                     <!-- edit footer logo here -->
                     <a href="/" class="logo col-sm-8">
-                        <img srcset="img/pwa-tickets-logo-1158x559.png 1158w,img/pwa-tickets-logo-700x338.png 700w,img/pwa-tickets-logo-570x276.png 570w,img/pwa-tickets-logo-533x258.png 533w,img/pwa-tickets-logo-460x223.png 460w,img/pwa-tickets-logo-320x155.png 320w" 
-                    class="navbar-logo" src="img/pwa-tickets-logo-1158x559.png" sizes="(max-width: 480px) 40vw, (max-width: 720px) 20vw, 10vw" alt="pwa-tickets-logo">
+                        <img srcset="img/pwa-tickets-logo-1158x559.png 1158w,img/pwa-tickets-logo-700x338.png 700w,img/pwa-tickets-logo-570x276.png 570w,img/pwa-tickets-logo-533x258.png 533w,img/pwa-tickets-logo-460x223.png 460w,img/pwa-tickets-logo-320x155.png 320w"
+                            class="navbar-logo" src="img/pwa-tickets-logo-1158x559.png" sizes="(max-width: 480px) 40vw, (max-width: 720px) 20vw, 10vw"
+                            alt="pwa-tickets-logo">
                     </a>
                     <div class="col-sm-12 text">
                         <p>
@@ -151,7 +202,7 @@
                                 <li>
                                     <a href="profile/">Profile</a>
                                 </li>
-                                                <li>
+                                <li>
                                     <a href="config/">Config</a>
                                 </li>
                             </ul>

@@ -48,24 +48,68 @@
 
     }
 
-    /* search */
-    function initSearch() {
+    function initLogout() {
 
-        var searchBox = _d.qs(".search-input");
+        var logoutBtn = _d.qs(".logout-btn");
 
-        searchBox.addEventListener("keyup", function (evt) {
+        logoutBtn.addEventListener("click", function (evt) {
 
             evt.preventDefault();
 
-            if (searchBox.value.length > 3 || evt.keyCode === 13) {
-
-                //search events & tickets
-
-            }
+            pwaTicketAPI.logout();
 
             return false;
 
         });
+
+    }
+
+    var eventListTemplate = "";
+
+    /* search */
+    function initSearch() {
+
+        pwaTicketAPI.loadTemplate("templates/event-list.html")
+            .then(function (template) {
+
+                if (template) {
+
+                    eventListTemplate = template;
+
+                    var searchBox = _d.qs(".search-input");
+
+                    searchBox.addEventListener("keyup", function (evt) {
+
+                        evt.preventDefault();
+
+                        if (searchBox.value.length > 3 || evt.keyCode === 13) {
+
+                            //search events & tickets
+                            pwaTicketAPI.searchFutureEvents(searchBox.value)
+                                .then(function (events) {
+
+                                    var target = _d.qs(".content-target");
+
+                                    target.innerHTML = Mustache.render(eventListTemplate, {
+                                        events: events
+                                    });
+
+                                });
+
+                        }
+
+                        return false;
+
+                    });
+
+                }
+
+            })
+            .catch(function (err) {
+
+                console.log(err);
+
+            });
 
     }
 
@@ -120,6 +164,7 @@
 
                         initSearch();
                         initMenuToggle();
+                        initLogout();
 
                     } else {
 

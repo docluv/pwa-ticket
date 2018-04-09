@@ -61,14 +61,15 @@
     <div class="navbar navbar-expand-lg navbar-light bg-light fixed-top " role="navigation">
         <div class="navbar-header">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-            aria-label="Toggle navigation">
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
         <div>
             <a class="navbar-brand" href="/">
-                <img srcset="img/pwa-tickets-logo-1158x559.png 1158w,img/pwa-tickets-logo-700x338.png 700w,img/pwa-tickets-logo-570x276.png 570w,img/pwa-tickets-logo-533x258.png 533w,img/pwa-tickets-logo-460x223.png 460w,img/pwa-tickets-logo-320x155.png 320w" 
-                    class="navbar-logo" src="img/pwa-tickets-logo-1158x559.png" sizes="(max-width: 480px) 40vw, (max-width: 720px) 20vw, 10vw" alt="pwa-tickets-logo">
+                <img srcset="img/pwa-tickets-logo-1158x559.png 1158w,img/pwa-tickets-logo-700x338.png 700w,img/pwa-tickets-logo-570x276.png 570w,img/pwa-tickets-logo-533x258.png 533w,img/pwa-tickets-logo-460x223.png 460w,img/pwa-tickets-logo-320x155.png 320w"
+                    class="navbar-logo" src="img/pwa-tickets-logo-1158x559.png" sizes="(max-width: 480px) 40vw, (max-width: 720px) 20vw, 10vw"
+                    alt="pwa-tickets-logo">
             </a>
         </div>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -87,6 +88,9 @@
                         <i class="fa fa-cog" aria-hidden="true"></i>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <button class="logout-btn btn-primary btn-outline-info my-2 my-sm-0" type="submit">Logout</button>
+                </li>
             </ul>
             <form class="form-inline my-2 my-lg-0 flex-nowrap">
                 <input class="form-control mr-sm-2 search-input" type="search" placeholder="Search" aria-label="Search">
@@ -96,8 +100,14 @@
     </div>
 
     <main class="page-content content-target">
-        <div class="loader"></div>
-    
+        <h2>Upcoming Events</h2>
+<div class="events-target d-flex flex-row justify-content-start flex-wrap align-content-start ">
+    <div class="loader"></div>
+</div>
+<h2>Your Tickets</h2>
+<div class="tickets-target d-flex flex-row justify-content-start flex-wrap align-content-start">
+    <div class="loader"></div>
+</div>
     </main>
 
     <footer class="main-footer">
@@ -106,8 +116,9 @@
                 <div class="col-md-4 col-sm-6">
                     <!-- edit footer logo here -->
                     <a href="/" class="logo col-sm-8">
-                        <img srcset="img/pwa-tickets-logo-1158x559.png 1158w,img/pwa-tickets-logo-700x338.png 700w,img/pwa-tickets-logo-570x276.png 570w,img/pwa-tickets-logo-533x258.png 533w,img/pwa-tickets-logo-460x223.png 460w,img/pwa-tickets-logo-320x155.png 320w" 
-                    class="navbar-logo" src="img/pwa-tickets-logo-1158x559.png" sizes="(max-width: 480px) 40vw, (max-width: 720px) 20vw, 10vw" alt="pwa-tickets-logo">
+                        <img srcset="img/pwa-tickets-logo-1158x559.png 1158w,img/pwa-tickets-logo-700x338.png 700w,img/pwa-tickets-logo-570x276.png 570w,img/pwa-tickets-logo-533x258.png 533w,img/pwa-tickets-logo-460x223.png 460w,img/pwa-tickets-logo-320x155.png 320w"
+                            class="navbar-logo" src="img/pwa-tickets-logo-1158x559.png" sizes="(max-width: 480px) 40vw, (max-width: 720px) 20vw, 10vw"
+                            alt="pwa-tickets-logo">
                     </a>
                     <div class="col-sm-12 text">
                         <p>
@@ -152,7 +163,7 @@
                                 <li>
                                     <a href="profile/">Profile</a>
                                 </li>
-                                                <li>
+                                <li>
                                     <a href="config/">Config</a>
                                 </li>
                             </ul>
