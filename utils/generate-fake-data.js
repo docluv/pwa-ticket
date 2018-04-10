@@ -7,7 +7,7 @@ const fs = require("fs"),
     barCodePath = path.resolve("../www/public/barcodes/"),
     utf8 = "utf-8";
 
-    const venues = [
+const venues = [
         "concert-1.jpg",
         "concert-2.jpg",
         "concert-3.jpg",
@@ -78,6 +78,14 @@ function generateEvents(future) {
 
         let venue = faker.random.number(8) - 1;
 
+        if (venue < 0) {
+            venue = 0;
+        }
+
+        if (venue > 7) {
+            venue = 7;
+        }
+    
         let event = {
             "id": faker.random.uuid(),
             "image": venues[venue],
@@ -187,7 +195,7 @@ function generateUserTickets(user) {
 
         db.tickets.push(user_ticket);
 
-//        delete ticket.event.tickets;
+        //        delete ticket.event.tickets;
 
         tickets.push(ticket);
 
@@ -251,6 +259,14 @@ db.futureEvents = generateEvents(true);
 for (count = 0; count < faker.random.number(100); count++) {
 
     let mugshot = faker.random.number(8) - 1;
+
+    if (mugshot < 0) {
+        mugshot = 0;
+    }
+
+    if (mugshot > 7) {
+        mugshot = 7;
+    }
 
     let user = {
         "id": faker.random.uuid(),

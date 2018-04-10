@@ -273,22 +273,15 @@ var pwaTicketAPI = (function () {
             return self.verifyToken()
                 .then(function (token) {
 
-                    // return self.getUserTickets(token.id)
-                    //     .then(function (tickets) {
-
-                    //         tickets.push(ticket);
-
-                            return fetch(api + "user/" + token.id + "/tickets/", {
-                                "method": "POST",
-                                "cache": 'no-cache',
-                                "headers": {
-                                    'content-type': 'application/json'
-                                },
-                                "mode": "cors",
-                                "body": JSON.stringify(ticket)
-                            });
-
-//                        });
+                    return fetch(api + "user/" + token.id + "/tickets/", {
+                        "method": "POST",
+                        "cache": 'no-cache',
+                        "headers": {
+                            'content-type': 'application/json'
+                        },
+                        "mode": "cors",
+                        "body": JSON.stringify(ticket)
+                    });
 
                 });
 
@@ -348,7 +341,6 @@ var pwaTicketAPI = (function () {
                     }
 
                 });
-
 
         },
 

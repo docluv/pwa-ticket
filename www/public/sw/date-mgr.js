@@ -58,7 +58,7 @@ class DateManager{
 
     static addSecondsToDate(t, seconds){
 
-        return t.setSeconds(t.getSeconds() + seconds);
+        return new Date(t.setSeconds(t.getSeconds() + seconds));
 
     }
 

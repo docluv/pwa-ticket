@@ -1,23 +1,21 @@
-importScripts("../js/libs/mustache.min.js");
+'use strict';
+
+self.importScripts("js/libs/mustache.min.js");
 
 
 class ResponseManager {
 
-    constructor(dynamicCaches, fallbacks = 
-        [{
-            "fallback": "images/offline-product.jpg",
+    constructor(dynamicCaches, fallbacks = [{
+            "fallback": "img/offline.png",
             "routes": [
-                "img\/thumbnails\/\S+",
-                "img\/originals\/\S+",
-                "img\/display\/\S+",
-                "img\/mobile\/\S+"
+                "img\/venues\/\S+",
+                "img\/people\/\S+"
             ]
         },
         {
-            "fallback": "fallback.html",
+            "fallback": "fallback",
             "routes": [
-                "\/$",
-                "product\/\S+"
+                "\/$"
             ]
         }
     ]) {
@@ -57,7 +55,108 @@ class ResponseManager {
 
     }
 
-    cacheFallingBackToNetwork(request, cacheName) {
+    fetchText(url) {
+
+        return fetch(url)
+            .then(response => {
+
+                if (response.ok) {
+
+                    return response.text();
+
+                }
+
+            });
+
+    }
+
+    fetchJSON(url) {
+
+        return fetch(url)
+            .then(response => {
+
+                if (response.ok) {
+
+                    return response.json();
+
+                }
+
+            });
+
+    }
+
+    fetchAndRenderResponseCache(options) {
+
+        //fetch appShell
+        //fetch template
+        //fetch data from API
+        //render page HTML
+        let appShell,
+            template,
+            json;
+
+        return fetchText(options.appShell)
+            .then(html => {
+
+                appShell = html;
+
+            })
+            .then(() => {
+
+                return fetchText(options.template)
+                    .then(html => {
+
+                        template = html;
+
+                    });
+
+            })
+            .then(() => {
+
+                return fetchJSON(options.dataUrl)
+                    .then(data => {
+                        json = data;
+                    });
+
+            }).then(() => {
+
+                let pageShell = appShell.replace("<%template%>", template);
+
+                let pageHTML = Mustache.render(pageShell, json);
+
+                //make custom response
+                let response = new Response(pageHTML, {
+                        headers: {
+                            'content-type': 'text/html'
+                        }
+                    }),
+                    copy = response.clone();
+
+                caches.open(options.cacheName)
+                    .then(cache => {
+                        cache.put(options.request, copy);
+                    });
+
+                return response;
+
+            });
+
+    }
+
+    cacheFallingBackToNetworkWithRender(options) {
+
+        var responseManager = this;
+
+        return caches.match(options.request)
+            .then(function (response) {
+
+                return response || fetchAndRenderResponseCache(options);
+
+            });
+
+    }
+
+    cacheFallingBackToNetworkCache(request, cacheName) {
 
         var responseManager = this;
 
@@ -113,6 +212,18 @@ class ResponseManager {
                 );
 
             })
+
+    }
+
+    cacheOnly(request, cacheName) {
+
+        return caches.match(request);
+
+    }
+
+    networkOnly(request) {
+
+        return fetch(request);
 
     }
 

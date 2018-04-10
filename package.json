@@ -5,7 +5,8 @@
     "main": "bin/build.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "http-server www/public -p 15500 -c -i"
+        "api-server": "json-server --watch db.json --port 15501",
+        "web-server": "http-server www/public -p 15500 -c -i"
     },
     "author": "Chris Love",
     "private": true,

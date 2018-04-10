@@ -1,34 +1,6 @@
 class InvalidationManager {
 
-    constructor(invalidationRules = [{
-            "cacheName": "precache-v4.03",
-            "invalidationStrategy": "ttl",
-            "strategyOptions": {
-                "ttl": 604800 //1 week
-            }
-        },
-        {
-            "cacheName": "dynamic-cache-v4.03",
-            "invalidationStrategy": "maxItems",
-            "strategyOptions": {
-                "max": 25
-            }
-        },
-        {
-            "cacheName": "product-image-cache-v4.03",
-            "invalidationStrategy": "maxItems",
-            "strategyOptions": {
-                "max": 10
-            }
-        },
-        {
-            "cacheName": "products-cache-v4.03",
-            "invalidationStrategy": "maxItems",
-            "strategyOptions": {
-                "max": 20
-            }
-        }
-    ]) {
+    constructor(invalidationRules = []) {
 
         this.invalidationRules = invalidationRules;
 
@@ -65,23 +37,24 @@ class InvalidationManager {
 
     maxItems(options) {
 
-        self.caches.open(options.cacheName).then((cache) => {
+        self.caches.open(options.cacheName)
+            .then((cache) => {
 
-            cache.keys().then((keys) => {
+                cache.keys().then((keys) => {
 
-                if (keys.length > options.strategyOptions.max) {
+                    if (keys.length > options.strategyOptions.max) {
 
-                    let purge = keys.length - options.strategyOptions.max;
+                        let purge = keys.length - options.strategyOptions.max;
 
-                    for (let i = 0; i < purge; i++) {
-                        cache.delete(keys[i]);
+                        for (let i = 0; i < purge; i++) {
+                            cache.delete(keys[i]);
+                        }
+
                     }
 
-                }
+                });
 
             });
-
-        });
 
     }
 
@@ -90,33 +63,27 @@ class InvalidationManager {
         console.log(rule.cacheName);
 
         self.caches.open(rule.cacheName)
-            .then((cache) => {
+            .then(cache => {
 
-                cache.keys().then(function (keys) {
+                cache.keys().then(keys => {
 
                     keys.forEach((request, index, array) => {
 
-                        cache.match(request).then((response) => {
-
-                            console.log(request.url);
-
-                            // for (let pair of response.headers.entries()) {
-                            //     console.log(pair[0]+ ': '+ pair[1]);
-                            //  }
+                        cache.match(request).then(response => {
 
                             let date = new Date(response.headers.get("date")),
-                                current = Date.now();
-
-                            console.log(date.toLocaleString());
+                                current = new Date(Date.now());
 
                             //300 === 5 minutes
                             //3600 === 1 Hour
                             //86400 === 1 day
                             //604800 === 1 week
 
-                            if (!DateManager.compareDates(current, DateManager.addSecondsToDate(date, 300))) {
+                            if (!DateManager.compareDates(current,
+                                    DateManager.addSecondsToDate(date, 
+                                        rule.strategyOptions.ttl))) {
 
-                                cache.add(request);
+                                cache.delete(request);
 
                             }
 
