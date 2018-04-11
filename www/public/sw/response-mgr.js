@@ -108,37 +108,6 @@ class ResponseManager {
 
     }
 
-    cacheFallingBackToNetworkWithRender(options) {
-
-        var responseManager = this;
-
-        return caches.match(options.request)
-            .then(response => {
-
-                return response || responseManager.networkOnly(options.request)
-                    .then(response => {
-
-                        let rsp = response.clone();
-
-                        //don't cache a 404 because the URL may become 200, etc
-                        //chrome-extension requests can't be cached
-                        //0 & 200 are good responses that can be cached
-                        if (responseManager.isResponseNotFound(rsp) ||
-                            request.url.indexOf("chrome-extension") > -1 ||
-                            !responseManager.isResponseCacheable(rsp)) {
-
-                            //return response;
-                            return caches.match(responseManager.getFallback(request.url));
-
-                        }
-
-
-                    });
-
-            });
-
-    }
-
     cacheFallingBackToNetwork(request, cacheName) {
 
         var responseManager = this;
@@ -155,26 +124,44 @@ class ResponseManager {
 
         var responseManager = this;
 
-        return responseManager.cacheFallingBackToNetwork(request, cacheName)
+        return caches.match(request)
             .then(response => {
 
-                var rsp = response.clone();
+                if (response) {
 
-                //don't cache a 404 because the URL may become 200, etc
-                //chrome-extension requests can't be cached
-                //0 & 200 are good responses that can be cached
-                if (!responseManager.isResponseNotFound(rsp) &&
-                    request.url.indexOf("chrome-extension") === -1 &&
-                    responseManager.isResponseCacheable(rsp)) {
+                    return response;
 
-                    //cache response for the next time around
-                    return caches.open(cacheName).then(function (cache) {
+                } else {
 
-                        cache.put(request, rsp);
+                    return fetch(request)
+                        .then(response => {
 
-                        return response;
+                            //don't cache a 404 because the URL may become 200, etc
+                            //chrome-extension requests can't be cached
+                            //0 & 200 are good responses that can be cached
+                            if (!responseManager.isResponseNotFound(response) &&
+                                request.method.toUpperCase() === "GET" &&
+                                request.url.indexOf("chrome-extension") === -1 &&
+                                responseManager.isResponseCacheable(response)) {
 
-                    });
+                                let rsp = response.clone();
+
+                                //cache response for the next time around
+                                return caches.open(cacheName).then(function (cache) {
+
+                                    cache.put(request, rsp);
+
+                                    return response;
+
+                                });
+
+                            } else {
+
+                                return response;
+
+                            }
+
+                        });
 
                 }
 
@@ -191,46 +178,6 @@ class ResponseManager {
     networkOnly(request) {
 
         return fetch(request);
-
-    }
-
-    matchRoute(path, url) {
-
-        var re = new RegExp(path);
-
-        return re.test(url);
-
-    }
-
-    returnFallback(request) {
-
-        var that = this;
-
-        that.fallbacks.forEach(function (value) {
-
-            value.routes.forEach(function (route) {
-
-                console.log("fallback match ", that.matchRoute(route, request.url),
-                    "for : ", request.url);
-
-            });
-
-        });
-
-    }
-
-    getFallback(url) {
-
-        if (/\.jpg|\.gif|\.png/.test(url)) {
-
-            return "images/offline-product.jpg";
-
-        } else if (!/\.css|\.js|\.woff|\.svg|\.eot/.test(url)) {
-            //should leave us with HTML
-
-            return "fallback/";
-
-        }
 
     }
 

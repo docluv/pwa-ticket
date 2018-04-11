@@ -4,7 +4,7 @@ const fs = require("fs"),
     ba64 = require("ba64"),
     utils = require("./utils"),
     qr = require('qr-encode'),
-    barCodePath = path.resolve("../www/public/barcodes/"),
+    qrCodePath = path.resolve("../www/public/barcodes/"),
     utf8 = "utf-8";
 
 const venues = [
@@ -60,9 +60,9 @@ function generateBarCode(id) {
         level: 'Q'
     });
 
-    //    fs.writeFileSync(barCodePath + "/" + id + ".gif", dataURI, 'base64');
+    //    fs.writeFileSync(qrCodePath + "/" + id + ".gif", dataURI, 'base64');
 
-    ba64.writeImageSync(barCodePath + "/" + id, dataURI);
+    ba64.writeImageSync(qrCodePath + "/" + id, dataURI);
 
     return id + ".gif";
 }
@@ -248,8 +248,8 @@ function addTicketToEvent(ticket, event, future) {
 
 //clean bar codes
 
-utils.removeDirForce(barCodePath + "/");
-utils.MakeDirectory(barCodePath);
+utils.removeDirForce(qrCodePath + "/");
+utils.MakeDirectory(qrCodePath);
 
 db.pastEvents = generateEvents(false);
 db.futureEvents = generateEvents(true);

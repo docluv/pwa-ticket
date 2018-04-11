@@ -191,7 +191,6 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-
 function getEventTemplate() {
 
     return fetch("templates/event.html")
@@ -228,7 +227,6 @@ function getEvent(id) {
         });
 
 }
-
 
 function renderEvent(event) {
 
@@ -280,7 +278,6 @@ function renderEvent(event) {
         });
 
 };
-
 
 function isAPIRequest(url) {
 

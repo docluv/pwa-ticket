@@ -7,40 +7,40 @@ class InvalidationManager {
         this.cacheCleanUp();
     }
 
-    cacheCleanUp() {
+cacheCleanUp() {
 
-        let invMgr = this;
+    let invMgr = this;
 
-        invMgr.invalidationRules.forEach((value) => {
+    invMgr.invalidationRules.forEach((value) => {
 
-            switch (value.invalidationStrategy) {
+        switch (value.invalidationStrategy) {
 
-                case "ttl":
+            case "ttl":
 
-                    invMgr.updateStaleEntries(value);
+                invMgr.updateStaleEntries(value);
 
-                    break;
+                break;
 
-                case "maxItems":
+            case "maxItems":
 
-                    invMgr.maxItems(value);
+                invMgr.maxItems(value);
 
-                    break;
+                break;
 
-                default:
-                    break;
-            }
+            default:
+                break;
+        }
 
-        });
+    });
 
-    }
+}
 
     maxItems(options) {
 
         self.caches.open(options.cacheName)
-            .then((cache) => {
+            .then(cache => {
 
-                cache.keys().then((keys) => {
+                cache.keys().then(keys => {
 
                     if (keys.length > options.strategyOptions.max) {
 
@@ -60,8 +60,6 @@ class InvalidationManager {
 
     updateStaleEntries(rule) {
 
-        console.log(rule.cacheName);
-
         self.caches.open(rule.cacheName)
             .then(cache => {
 
@@ -80,7 +78,7 @@ class InvalidationManager {
                             //604800 === 1 week
 
                             if (!DateManager.compareDates(current,
-                                    DateManager.addSecondsToDate(date, 
+                                    DateManager.addSecondsToDate(date,
                                         rule.strategyOptions.ttl))) {
 
                                 cache.delete(request);
