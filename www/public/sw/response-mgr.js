@@ -5,31 +5,13 @@ self.importScripts("js/libs/mustache.min.js");
 
 class ResponseManager {
 
-    constructor(dynamicCaches, fallbacks = [{
-            "fallback": "img/offline.png",
-            "routes": [
-                "img\/venues\/\S+",
-                "img\/people\/\S+"
-            ]
-        },
-        {
-            "fallback": "fallback",
-            "routes": [
-                "\/$"
-            ]
-        }
-    ]) {
-
-        this.dynamicCaches = dynamicCaches;
-        this.fallbacks = fallbacks;
-
-    }
-
     isResponseCacheable(response) {
 
         //only cache good responses
         //200 - Good :)
-        // 0  - Good, but CORS. There is nothing I could find official about this, but Chrome returns this for CORS responses that are 200.
+        // 0  - Good, but CORS. 
+        //This is for Cross Origin opaque requests
+
         return [0, 200].includes(response.status);
 
     }
@@ -37,21 +19,6 @@ class ResponseManager {
     isResponseNotFound(response) {
 
         return response.status === 404;
-
-    }
-
-    getFallback(url) {
-
-        if (/\.jpg|\.gif|\.png/.test(url)) {
-
-            return "images/offline-product.jpg";
-
-        } else if (!/\.css|\.js|\.woff|\.svg|\.eot/.test(url)) {
-            //should leave us with HTML
-
-            return "fallback/";
-
-        }
 
     }
 
@@ -85,47 +52,45 @@ class ResponseManager {
 
     }
 
+    /*
+        This will fetch an app shell, page and data template
+        It then uses Mustache to render everything together
+    */
     fetchAndRenderResponseCache(options) {
 
         //fetch appShell
         //fetch template
         //fetch data from API
         //render page HTML
-        let appShell,
-            template,
-            json;
 
-        return fetchText(options.appShell)
-            .then(html => {
+        // let appShell,
+        //     template,
+        //     json;
 
-                appShell = html;
-
-            })
-            .then(() => {
+        return fetchText(options.pageURL)
+            .then(pageHTML => {
 
                 return fetchText(options.template)
-                    .then(html => {
+                    .then(template => {
 
-                        template = html;
+                        return pageHTML.replace(/<%template%>/g, template);
 
                     });
 
             })
-            .then(() => {
+            .then(pageTemplate => {
 
                 return fetchJSON(options.dataUrl)
                     .then(data => {
-                        json = data;
+
+                        return Mustache.render(pageTemplate, data);
+
                     });
 
-            }).then(() => {
-
-                let pageShell = appShell.replace("<%template%>", template);
-
-                let pageHTML = Mustache.render(pageShell, json);
+            }).then(html => {
 
                 //make custom response
-                let response = new Response(pageHTML, {
+                let response = new Response(html, {
                         headers: {
                             'content-type': 'text/html'
                         }
@@ -148,26 +113,12 @@ class ResponseManager {
         var responseManager = this;
 
         return caches.match(options.request)
-            .then(function (response) {
+            .then(response => {
 
-                return response || fetchAndRenderResponseCache(options);
+                return response || responseManager.networkOnly(options.request)
+                    .then(response => {
 
-            });
-
-    }
-
-    cacheFallingBackToNetworkCache(request, cacheName) {
-
-        var responseManager = this;
-
-        return caches.match(request)
-            .then(function (response) {
-
-                return (
-                    response || fetch(request)
-                    .then(function (response) {
-
-                        var rsp = response.clone();
+                        let rsp = response.clone();
 
                         //don't cache a 404 because the URL may become 200, etc
                         //chrome-extension requests can't be cached
@@ -176,42 +127,58 @@ class ResponseManager {
                             request.url.indexOf("chrome-extension") > -1 ||
                             !responseManager.isResponseCacheable(rsp)) {
 
-                            console.log(rsp.status + " " + request.url);
-
                             //return response;
-                            return caches.match(responseManager
-                                .getFallback(request.url));
+                            return caches.match(responseManager.getFallback(request.url));
 
                         }
 
-                        //cache response for the next time around
-                        return caches.open(cacheName).then(function (cache) {
 
-                            console.log("caching : ", request.url);
+                    });
 
-                            cache.put(request, rsp);
+            });
 
-                            return response;
+    }
 
-                        });
+    cacheFallingBackToNetwork(request, cacheName) {
 
-                    })
-                    .catch(function (err) {
+        var responseManager = this;
 
-                        console.error("error fetching: ", request.url);
+        return caches.match(request)
+            .then(response => {
 
-                        //                            responseManager.returnFallback(request);
+                return response || fetch(request);
 
-                        return caches.match(responseManager.getFallback(request.url));
+            });
+    }
 
-                        // if(err.request){
-                        //   console.error(" url: " + err.request.url);
-                        // }
-                    })
+    cacheFallingBackToNetworkCache(request, cacheName) {
 
-                );
+        var responseManager = this;
 
-            })
+        return responseManager.cacheFallingBackToNetwork(request, cacheName)
+            .then(response => {
+
+                var rsp = response.clone();
+
+                //don't cache a 404 because the URL may become 200, etc
+                //chrome-extension requests can't be cached
+                //0 & 200 are good responses that can be cached
+                if (!responseManager.isResponseNotFound(rsp) &&
+                    request.url.indexOf("chrome-extension") === -1 &&
+                    responseManager.isResponseCacheable(rsp)) {
+
+                    //cache response for the next time around
+                    return caches.open(cacheName).then(function (cache) {
+
+                        cache.put(request, rsp);
+
+                        return response;
+
+                    });
+
+                }
+
+            });
 
     }
 
@@ -249,6 +216,21 @@ class ResponseManager {
             });
 
         });
+
+    }
+
+    getFallback(url) {
+
+        if (/\.jpg|\.gif|\.png/.test(url)) {
+
+            return "images/offline-product.jpg";
+
+        } else if (!/\.css|\.js|\.woff|\.svg|\.eot/.test(url)) {
+            //should leave us with HTML
+
+            return "fallback/";
+
+        }
 
     }
 

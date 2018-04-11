@@ -1,9 +1,11 @@
 'use strict';
 
 self.importScripts("js/libs/localforage.min.js",
-    "js/libs/mustache.min.js",
-    "js/app/libs/api.js", "sw/response-mgr.js", "sw/push-mgr.js",
-    "sw/invalidation-mgr.js", "sw/date-mgr.js"
+    "js/app/libs/api.js", 
+    "sw/response-mgr.js", 
+    "sw/push-mgr.js",
+    "sw/invalidation-mgr.js", 
+    "sw/date-mgr.js"
 );
 
 const version = "1.05",
@@ -53,14 +55,7 @@ const version = "1.05",
         "cart/"
     ],
     apiHost = "http://localhost:15501/",
-    responseManager = new ResponseManager([{
-        "route": "/event\?/",
-        "cache": eventsCacheName
-    },
-    {
-        "route": "/qrcodes\?/",
-        "cache": qrCodesCacheName
-    }]),
+    responseManager = new ResponseManager(),
     pushManager = new PushManager(),
     invalidationManager = new InvalidationManager([{
         "cacheName": preCache,
@@ -93,7 +88,6 @@ function getCacheName(url) {
     return cacheName;
 
 }
-
 
 self.addEventListener("install", event => {
 
@@ -151,7 +145,6 @@ self.addEventListener("fetch", event => {
     );
 
 });
-
 
 //Push Stuff
 self.addEventListener("pushsubscriptionchange", event => {
