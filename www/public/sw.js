@@ -1,10 +1,10 @@
 'use strict';
 
 self.importScripts("js/libs/localforage.min.js",
-    "js/app/libs/api.js", 
-    "sw/response-mgr.js", 
+    "js/app/libs/api.js",
+    "sw/response-mgr.js",
     "sw/push-mgr.js",
-    "sw/invalidation-mgr.js", 
+    "sw/invalidation-mgr.js",
     "sw/date-mgr.js"
 );
 
@@ -58,22 +58,41 @@ const version = "1.05",
     responseManager = new ResponseManager(),
     pushManager = new PushManager(),
     invalidationManager = new InvalidationManager([{
-        "cacheName": preCache,
-        "invalidationStrategy": "ttl",
-        "strategyOptions": {
-          "ttl": 100
-          //604800 //1 week
+            "cacheName": preCache,
+            "invalidationStrategy": "ttl",
+            "strategyOptions": {
+                "ttl": 100
+                //604800 //1 week
+            }
+        },
+        {
+            "cacheName": qrCodesCacheName,
+            "invalidationStrategy": "maxItems",
+            "strategyOptions": {
+                "max": 10
+            }
         }
-      },
-      {
-        "cacheName": qrCodesCacheName,
-        "invalidationStrategy": "maxItems",
-        "strategyOptions": {
-          "max": 10
+    ]),
+    routeRules = [{
+            "route": /event\/\?/,
+            "strategy": "fetchAndRenderResponseCache",
+            "options": {
+                pageURL: "templates/event-page.html",
+                template: "templates/event.html",
+                api: function (request) {
+                    return pwaTicketAPI.getEvent(getParameterByName("id", request.url));
+                },
+                cacheName: eventsCacheName
+            },
+            "cacheName": eventsCacheName
+        },
+        {
+            "route": /qrcodes/,
+            "strategy": "cacheFallingBackToNetworkCache",
+            "cacheName": qrCodesCacheName
         }
-      }]);
+    ];
 
-/*  Service Worker Event Handlers */
 
 function getCacheName(url) {
 
@@ -92,8 +111,6 @@ function getCacheName(url) {
 self.addEventListener("install", event => {
 
     self.skipWaiting();
-
-    console.log("Installing the service worker!");
 
     caches.open(preCache)
         .then(cache => {
@@ -129,22 +146,86 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
 
-    let cacheName = getCacheName(event.request.url);
-
     event.respondWith(
 
-        responseManager.cacheFallingBackToNetworkCache(event.request, cacheName)
-        .then(response => {
-    
-          invalidationManager.invalidateCache(cacheName);
-    
-          return response;
-    
-        })
-    
+        handleResponse(event)
+
+
     );
 
 });
+
+function handleResponse(event) {
+
+    let cacheName = getCacheName(event.request.url);
+
+    let rule = testRequestRule(event.request.url, routeRules);
+
+    rule = rule || {};
+
+    switch (rule.strategy) {
+
+    case "cacheFallingBackToNetwork":
+
+        return responseManager.cacheFallingBackToNetworkCache(event.request, cacheName);
+
+        break;
+
+        case "fetchAndRenderResponseCache":
+
+            return responseManager.fetchAndRenderResponseCache({
+                request: event.request,
+                pageURL: rule.options.pageURL,
+                template: rule.options.template,
+                api: rule.options.api,
+                cacheName: cacheName    
+            })
+                .then(response => {
+
+                    invalidationManager.cacheCleanUp(cacheName);
+
+                    return response;
+
+                });
+
+            break;
+
+        case "cacheOnly":
+
+            return responseManager.cacheOnly(event.request, cacheName)
+                .then(response => {
+
+                    invalidationManager.cacheCleanUp(cacheName);
+
+                    return response;
+
+                });
+
+            break;
+
+        case "networkOnly":
+
+            return responseManager.networkOnly(event.request);
+
+            break;
+
+    case "cacheFallingBackToNetworkCache":
+    default:
+
+        return responseManager.cacheFallingBackToNetworkCache(event.request, cacheName)
+            .then(response => {
+
+                invalidationManager.cacheCleanUp(cacheName);
+
+                return response;
+
+            });
+
+        break;
+    }
+
+}
+
 
 //Push Stuff
 self.addEventListener("pushsubscriptionchange", event => {
@@ -153,25 +234,18 @@ self.addEventListener("pushsubscriptionchange", event => {
 
 });
 
+function testRequestRule(url, rules) {
 
-function getAppShell() {
+    for (let i = 0; i < rules.length - 1; i++) {
 
-    return fetch("html/app-shell.html")
-        .then(response => {
+        if (rules[i].route.test(url)) {
+            return rules[i];
+        }
 
-            if (response.ok) {
-
-                return response.text()
-                    .then(html => {
-
-                        return html;
-
-                    });
-            }
-
-        });
+    }
 
 }
+
 
 function getParameterByName(name, url) {
 

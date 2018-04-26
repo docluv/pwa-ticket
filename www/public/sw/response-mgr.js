@@ -55,22 +55,23 @@ class ResponseManager {
     /*
         This will fetch an app shell, page and data template
         It then uses Mustache to render everything together
+
+        {
+            request: //the request that triggered the fetch
+            pageURL: "url to core page html",
+            template: "url to the data template",
+            api: //a method to execute that makes the API call,
+            cacheName: "cache name to save the rendered response"
+        }
     */
     fetchAndRenderResponseCache(options) {
 
-        //fetch appShell
-        //fetch template
-        //fetch data from API
-        //render page HTML
+        let _self = this;
 
-        // let appShell,
-        //     template,
-        //     json;
-
-        return fetchText(options.pageURL)
+        return _self.fetchText(options.pageURL)
             .then(pageHTML => {
 
-                return fetchText(options.template)
+                return _self.fetchText(options.template)
                     .then(template => {
 
                         return pageHTML.replace(/<%template%>/g, template);
@@ -80,7 +81,7 @@ class ResponseManager {
             })
             .then(pageTemplate => {
 
-                return fetchJSON(options.dataUrl)
+                return options.api(options.request)
                     .then(data => {
 
                         return Mustache.render(pageTemplate, data);

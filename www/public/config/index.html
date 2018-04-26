@@ -101,20 +101,34 @@
 
     <main class="page-content content-target">
         <div class="container">
-    <div class="row">
-        <h1 class="display-6">PWA Ticket Configuration</h1>
-    </div>
-    <div class="row">
-        <div class="list-group col-sm-12">
-            <div class="list-group-item list-group-item-action flex-column align-items-start">
-                <div class="d-flex w-100 justify-content-between">
-                    <input type="checkbox" id="cbNotifications">
-                    <label for="cbNotifications">Notifications</label>
+            <div class="row">
+                <div class="list-group col-sm-12 col-md-6">
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <input type="checkbox" id="cbNotifications">
+                            <label for="cbNotifications">Notifications</label>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="list-group col-sm-12 col-md-6">
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <label for="noProductHistory" class="col-sm-6 col-md-5">Event Limit</label>
+                        <input type="number" name="noProductHistory" value="20">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="list-group col-sm-12 col-md-6">
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <label for="numFavorites" class="col-sm-6 col-md-5">Maximum Ticket QR Codes</label>
+                        <input type="number" name="numFavorites" value="10">
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </div>
-</div>
     </main>
 
     <footer class="main-footer">

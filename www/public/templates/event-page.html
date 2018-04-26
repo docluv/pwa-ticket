@@ -11,7 +11,7 @@
     <link rel="preload" href="js/libs/utils.js" as="script" type="application/javascript">
     <link rel="preload" href="js/libs/localforage.min.js" as="script" type="application/javascript">
     <link rel="preload" href="js/libs/mustache.min.js" as="script" type="application/javascript">
-    <link rel="preload" href="js/app/pages/home.js" as="script" type="application/javascript">
+    <link rel="preload" href="js/app/pages/event.js" as="script" type="application/javascript">
     <link rel="preload" href="js/app/app.js" as="script" type="application/javascript">
 
     <!-- Stylesheets -->
@@ -100,14 +100,7 @@
     </div>
 
     <main class="page-content content-target">
-        <h2>Upcoming Events</h2>
-        <div class="events-target d-flex flex-row justify-content-start flex-wrap align-content-start ">
-            <div class="loader"></div>
-        </div>
-        <h2>Your Tickets</h2>
-        <div class="tickets-target d-flex flex-row justify-content-start flex-wrap align-content-start">
-            <div class="loader"></div>
-        </div>
+        <%template%>
     </main>
 
     <footer class="main-footer">
@@ -222,7 +215,7 @@
     <script src="js/app/libs/api.js"></script>
     <script src="js/app/libs/push-mgr.js"></script>
     <script src="js/app/app.js"></script>
-    <script src="js/app/pages/home.js"></script>
+    <script src="js/app/pages/event.js"></script>
 </body>
 
 </html>

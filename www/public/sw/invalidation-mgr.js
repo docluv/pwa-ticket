@@ -7,33 +7,33 @@ class InvalidationManager {
         this.cacheCleanUp();
     }
 
-cacheCleanUp() {
+    cacheCleanUp() {
 
-    let invMgr = this;
+        let invMgr = this;
 
-    invMgr.invalidationRules.forEach((value) => {
+        invMgr.invalidationRules.forEach((value) => {
 
-        switch (value.invalidationStrategy) {
+            switch (value.invalidationStrategy) {
 
-            case "ttl":
+                case "ttl":
 
-                invMgr.updateStaleEntries(value);
+                    invMgr.updateStaleEntries(value);
 
-                break;
+                    break;
 
-            case "maxItems":
+                case "maxItems":
 
-                invMgr.maxItems(value);
+                    invMgr.maxItems(value);
 
-                break;
+                    break;
 
-            default:
-                break;
-        }
+                default:
+                    break;
+            }
 
-    });
+        });
 
-}
+    }
 
     maxItems(options) {
 
@@ -92,39 +92,6 @@ cacheCleanUp() {
                 });
 
             });
-
-    }
-
-    invalidateCache(cacheName) {
-
-        let invMgr = this;
-
-        invMgr.invalidationRules.forEach((value) => {
-
-            if (value.cacheName === cacheName) {
-
-                switch (value.invalidationStrategy) {
-
-                    case "ttl":
-
-                        invMgr.updateStaleEntries(value);
-
-                        break;
-
-                    case "maxItems":
-
-                        invMgr.maxItems(value);
-
-                        break;
-
-                    default:
-                        break;
-                }
-
-            }
-
-        });
-
 
     }
 
