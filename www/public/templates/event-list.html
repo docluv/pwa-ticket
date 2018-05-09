@@ -3,7 +3,13 @@
     <div class="card-header">
         <h5 class="card-title">{{title}}</h5>
     </div>
-    <img class="card-img-top ticket-barcode" src="img/venues/{{image}}" alt="{{title}}" />
+    <img class="card-img-top lazy-image" 
+    data-src="img/venues/optimized/{{image.image.img}}" 
+    data-srcset="
+    {{#image.images}}
+        img/venues/optimized/{{{img}}} {{width}}w, 
+    {{/image.images}}
+    " sizes="(max-width: 480px) 95vw, 395px" alt="{{title}}" />
 
     <div class="card-body">
         <p class="card-text">{{venue}}</p>

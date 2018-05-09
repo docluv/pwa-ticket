@@ -9,6 +9,7 @@
     <link rel="preload" href="css/app/site.css" as="style">
 
     <link rel="preload" href="js/libs/utils.js" as="script" type="application/javascript">
+    <link rel="preload" href="js/libs/lazy.images.js" as="script" type="application/javascript">
     <link rel="preload" href="js/libs/localforage.min.js" as="script" type="application/javascript">
     <link rel="preload" href="js/libs/mustache.min.js" as="script" type="application/javascript">
     <link rel="preload" href="js/app/pages/config.js" as="script" type="application/javascript">
@@ -58,7 +59,7 @@
 
 <body>
 
-    <div class="navbar navbar-expand-lg navbar-light bg-light fixed-top " role="navigation">
+    <header class="navbar navbar-expand-lg navbar-light bg-light fixed-top " role="navigation">
         <div class="navbar-header">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -97,38 +98,40 @@
                 <button class="search-query-btn btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
             </form>
         </div>
-    </div>
+    </header>
 
     <main class="page-content content-target">
         <div class="container">
-            <div class="row">
-                <div class="list-group col-sm-12 col-md-6">
-                    <div class="list-group-item list-group-item-action flex-column align-items-start">
-                        <div class="d-flex w-100 justify-content-between">
-                            <input type="checkbox" id="cbNotifications">
-                            <label for="cbNotifications">Notifications</label>
-                        </div>
-                    </div>
+    <div class="row">
+        <h1 class="display-6">PWA Ticket Configuration</h1>
+    </div>
+    <div class="row">
+        <div class="list-group col-sm-12">
+            <div class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <input type="checkbox" id="cbNotifications">
+                    <label for="cbNotifications">Notifications</label>
                 </div>
             </div>
-            <div class="row">
-                <div class="list-group col-sm-12 col-md-6">
-                    <div class="list-group-item list-group-item-action flex-column align-items-start">
-                        <label for="noProductHistory" class="col-sm-6 col-md-5">Event Limit</label>
-                        <input type="number" name="noProductHistory" value="20">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="list-group col-sm-12 col-md-6">
-                    <div class="list-group-item list-group-item-action flex-column align-items-start">
-                        <label for="numFavorites" class="col-sm-6 col-md-5">Maximum Ticket QR Codes</label>
-                        <input type="number" name="numFavorites" value="10">
-                    </div>
-                </div>
-            </div>
-
         </div>
+    </div>
+    <div class="row">
+        <div class="list-group col-sm-12 col-md-6">
+            <div class="list-group-item list-group-item-action flex-column align-items-start">
+                <label for="noProductHistory" class="col-sm-6 col-md-5">Event Limit</label>
+                <input type="number" name="noProductHistory">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="list-group col-sm-12 col-md-6">
+            <div class="list-group-item list-group-item-action flex-column align-items-start">
+                <label for="numFavorites" class="col-sm-6 col-md-5">Maximum Ticket QR Codes</label>
+                <input type="number" name="numFavorites">
+            </div>
+        </div>
+    </div>
+</div>
     </main>
 
     <footer class="main-footer">
@@ -185,6 +188,9 @@
                                     <a href="profile/">Profile</a>
                                 </li>
                                 <li>
+                                    <a href="contact/">Contact</a>
+                                </li>
+                                <li>
                                     <a href="config/">Config</a>
                                 </li>
                             </ul>
@@ -198,10 +204,10 @@
         </div>
     </footer>
 
-
     <script type="script-polyfil" id="polyfilassign" src="js/libs/polyfils/object.assign.js"></script>
     <script type="script-polyfil" id="polyfilpromise" src="js/libs/polyfils/es6-promise.min.js"></script>
     <script type="script-polyfil" id="polyfilfetch" src="js/libs/polyfils/fetch.js"></script>
+    <script type="script-polyfil" id="polyfilintersection" src="js/libs/polyfils/intersection-observer.js"></script>
 
     <script>
         //wrap in IIFE to keep out of global scope
@@ -233,10 +239,17 @@
 
             }
 
+            if (typeof IntersectionObserver === "undefined" || IntersectionObserver.toString().indexOf("[native code]") === -1) {
+
+                toggleScript("polyfilintersection");
+
+            }
+
         }());
     </script>
 
     <script src="js/libs/utils.js"></script>
+    <script src="js/libs/lazy.images.js"></script>
     <script src="js/libs/localforage.min.js"></script>
     <script src="js/libs/mustache.min.js"></script>
     <script src="js/libs/utils.js"></script>

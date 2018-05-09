@@ -1,1 +1,1 @@
-{"name":"fallback","slug":"fallback","scripts":[],"css":[]}
+{"name":"fallback","slug":"fallback","scripts":["js/app/pages/fallback.js"],"css":[]}

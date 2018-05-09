@@ -9,6 +9,7 @@
     <link rel="preload" href="css/app/site.css" as="style">
 
     <link rel="preload" href="js/libs/utils.js" as="script" type="application/javascript">
+    <link rel="preload" href="js/libs/lazy.images.js" as="script" type="application/javascript">
     <link rel="preload" href="js/libs/localforage.min.js" as="script" type="application/javascript">
     <link rel="preload" href="js/libs/mustache.min.js" as="script" type="application/javascript">
     <link rel="preload" href="js/app/pages/{{name}}.js" as="script" type="application/javascript">
@@ -176,6 +177,7 @@
     <script type="script-polyfil" id="polyfilassign" src="js/libs/polyfils/object.assign.js"></script>
     <script type="script-polyfil" id="polyfilpromise" src="js/libs/polyfils/es6-promise.min.js"></script>
     <script type="script-polyfil" id="polyfilfetch" src="js/libs/polyfils/fetch.js"></script>
+    <script type="script-polyfil" id="polyfilintersection" src="js/libs/polyfils/intersection-observer.js"></script>
 
     <script>
         //wrap in IIFE to keep out of global scope
@@ -207,10 +209,17 @@
 
             }
 
+            if (typeof IntersectionObserver === "undefined" || IntersectionObserver.toString().indexOf("[native code]") === -1) {
+
+                toggleScript("polyfilintersection");
+
+            }
+
         }());
     </script>
 
     <script src="js/libs/utils.js"></script>
+    <script src="js/libs/lazy.images.js"></script>
     <script src="js/libs/localforage.min.js"></script>
     <script src="js/libs/mustache.min.js"></script>
     <script src="js/libs/utils.js"></script>

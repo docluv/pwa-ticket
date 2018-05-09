@@ -18,6 +18,8 @@
 
                                 target.innerHTML = Mustache.render(template, ticket);
 
+                                lazyImages.lazyDisplay();
+
                             });
 
 

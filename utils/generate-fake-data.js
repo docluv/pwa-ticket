@@ -4,18 +4,209 @@ const fs = require("fs"),
     ba64 = require("ba64"),
     utils = require("./utils"),
     qr = require('qr-encode'),
-    qrCodePath = path.resolve("../www/public/barcodes/"),
+    qrCodePath = path.resolve("../www/public/qrcodes/"),
     utf8 = "utf-8";
 
-const venues = [
-        "concert-1.jpg",
-        "concert-2.jpg",
-        "concert-3.jpg",
-        "concert-4.jpg",
-        "stadium-1.jpg",
-        "stadium-2.jpg",
-        "stadium-3.jpg",
-        "stadium-4.jpg"
+const venues = [{
+            "image": {
+                "img": "concert-1-800x532.jpg",
+                "width": 800,
+                "height": 532
+            },
+            "images": [{
+                "img": "concert-1-800x532.jpg",
+                "width": 800,
+                "height": 532
+            }, {
+                "img": "concert-1-720x479.jpg",
+                "width": 720,
+                "height": 479
+            }, {
+                "img": "concert-1-460x306.jpg",
+                "width": 460,
+                "height": 306
+            }, {
+                "img": "concert-1-320x213.jpg",
+                "width": 320,
+                "height": 213
+            }]
+        },
+        {
+            "image": {
+                "img": "concert-2-474x301.jpg",
+                "width": 474,
+                "height": 301
+            },
+            "images": [{
+                "img": "concert-2-474x301.jpg",
+                "width": 474,
+                "height": 301
+            }, {
+                "img": "concert-2-460x293.jpg",
+                "width": 460,
+                "height": 293
+            }, {
+                "img": "concert-2-320x204.jpg",
+                "width": 320,
+                "height": 204
+            }]
+        },
+        {
+            "image": {
+                "img": "concert-3-1360x922.jpg",
+                "width": 1360,
+                "height": 922
+            },
+            "images": [{
+                "img": "concert-3-1360x922.jpg",
+                "width": 1360,
+                "height": 922
+            }, {
+                "img": "concert-3-474x322.jpg",
+                "width": 474,
+                "height": 322
+            }, {
+                "img": "concert-3-460x312.jpg",
+                "width": 460,
+                "height": 312
+            }, {
+                "img": "concert-3-320x217.jpg",
+                "width": 320,
+                "height": 217
+            }]
+        },
+        {
+            "image": {
+                "img": "concert-4-1200x900.jpg",
+                "width": 1200,
+                "height": 900
+            },
+            "images": [{
+                "img": "concert-4-1200x900.jpg",
+                "width": 1200,
+                "height": 900
+            }, {
+                "img": "concert-4-474x356.jpg",
+                "width": 474,
+                "height": 356
+            }, {
+                "img": "concert-4-460x345.jpg",
+                "width": 460,
+                "height": 345
+            }, {
+                "img": "concert-4-320x240.jpg",
+                "width": 320,
+                "height": 240
+            }]
+        },
+        {
+            "image": {
+                "img": "stadium-1-973x648.jpg",
+                "width": 973,
+                "height": 648
+            },
+            "images": [{
+                "img": "stadium-1-973x648.jpg",
+                "width": 973,
+                "height": 648
+            }, {
+                "img": "stadium-1-474x316.jpg",
+                "width": 474,
+                "height": 316
+            }, {
+                "img": "stadium-1-460x307.jpg",
+                "width": 460,
+                "height": 307
+            }, {
+                "img": "stadium-1-320x214.jpg",
+                "width": 320,
+                "height": 214
+            }]
+        },
+        {
+            "image": {
+                "img": "stadium-2-474x263.jpg",
+                "width": 474,
+                "height": 263
+            },
+            "images": [{
+                "img": "stadium-2-474x263.jpg",
+                "width": 474,
+                "height": 263
+            }, {
+                "img": "stadium-2-474x263.jpg",
+                "width": 474,
+                "height": 263
+            }, {
+                "img": "stadium-2-460x256.jpg",
+                "width": 460,
+                "height": 256
+            }, {
+                "img": "stadium-2-320x178.jpg",
+                "width": 320,
+                "height": 178
+            }]
+        },
+        {
+            "image": {
+                "img": "stadium-3-1000x618.jpg",
+                "width": 1000,
+                "height": 618
+            },
+            "images": [{
+                "img": "stadium-3-1000x618.jpg",
+                "width": 1000,
+                "height": 618
+            }, {
+                "img": "stadium-3-474x293.jpg",
+                "width": 474,
+                "height": 293
+            }, {
+                "img": "stadium-3-474x293.jpg",
+                "width": 474,
+                "height": 293
+            }, {
+                "img": "stadium-3-460x285.jpg",
+                "width": 460,
+                "height": 285
+            }, {
+                "img": "stadium-3-320x198.jpg",
+                "width": 320,
+                "height": 198
+            }]
+        },
+        {
+            "image": {
+                "img": "stadium-4-1000x636.jpg",
+                "width": 1000,
+                "height": 636
+            },
+            "images": [{
+                "img": "stadium-4-1000x636.jpg",
+                "width": 1000,
+                "height": 636
+            }, {
+                "img": "stadium-4-1000x636.jpg",
+                "width": 1000,
+                "height": 636
+            }, {
+                "img": "stadium-4-474x302.jpg",
+                "width": 474,
+                "height": 302
+            }, {
+                "img": "stadium-4-474x302.jpg",
+                "width": 474,
+                "height": 302
+            }, {
+                "img": "stadium-4-460x293.jpg",
+                "width": 460,
+                "height": 293
+            }, {
+                "img": "stadium-4-320x204.jpg",
+                "width": 320,
+                "height": 204
+            }]
+        }
     ],
     mugshots = [
         "avtar-1.jpg",
@@ -85,7 +276,7 @@ function generateEvents(future) {
         if (venue > 7) {
             venue = 7;
         }
-    
+
         let event = {
             "id": faker.random.uuid(),
             "image": venues[venue],

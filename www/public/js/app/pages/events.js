@@ -14,6 +14,8 @@
                             events: events
                         });
 
+                        lazyImages.lazyDisplay();
+
                     });
 
             }

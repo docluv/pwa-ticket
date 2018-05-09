@@ -17,6 +17,8 @@
                                     events: events
                                 });
 
+                                lazyImages.lazyDisplay();
+
                             });
 
                     }
@@ -49,6 +51,11 @@
                                 target.innerHTML = Mustache.render(template, {
                                     tickets: tickets
                                 });
+
+                            })
+                            .catch(function (err) {
+
+                                console.log(err);
 
                             });
 

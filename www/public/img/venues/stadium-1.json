@@ -1,0 +1,24 @@
+{
+    "image": {
+        "img": "img/stadium-1-973x648.jpg",
+        "width": 973,
+        "height": 648
+    },
+    "images": [{
+        "img": "img/stadium-1-973x648.jpg",
+        "width": 973,
+        "height": 648
+    }, {
+        "img": "img/stadium-1-474x316.jpg",
+        "width": 474,
+        "height": 316
+    }, {
+        "img": "img/stadium-1-460x307.jpg",
+        "width": 460,
+        "height": 307
+    }, {
+        "img": "img/stadium-1-320x214.jpg",
+        "width": 320,
+        "height": 214
+    }]
+}

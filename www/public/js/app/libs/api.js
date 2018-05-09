@@ -167,23 +167,23 @@ var pwaTicketAPI = (function () {
 
         },
 
-getUser: function (userId) {
+        getUser: function (userId) {
 
-    return fetch(api + "users/" + userId)
-        .then(function (response) {
+            return fetch(api + "users/" + userId)
+                .then(function (response) {
 
-            if (response.ok) {
+                    if (response.ok) {
 
-                return response.json();
+                        return response.json();
 
-            } else {
+                    } else {
 
-                throw "user tickets fetch failed";
-            }
+                        throw "user tickets fetch failed";
+                    }
 
-        });
+                });
 
-},
+        },
 
         getFutureEvents: function () {
 
@@ -255,16 +255,16 @@ getUser: function (userId) {
 
         },
 
-updateUser: function (user) {
+        updateUser: function (user) {
 
-    return fetch({
-        "method": "POST",
-        "Content-Type": "application/json",
-        "body": JSON.stringify(user),
-        "url": api + "users/"
-    });
+            return fetch({
+                "method": "POST",
+                "Content-Type": "application/json",
+                "body": JSON.stringify(user),
+                "url": api + "users/"
+            });
 
-},
+        },
 
         buyTicket: function (ticket) {
 

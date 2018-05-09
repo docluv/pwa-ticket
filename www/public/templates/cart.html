@@ -4,7 +4,14 @@
     </div>
     <div class="row">
         <div class="col-md-6 text-center">
-            <img class="card-img-top ticket-barcode" src="img/venues/{{event.image}}" alt="{{title}}" />
+            <img class="card-img-top " 
+            src="img/venues/optimized/{{event.image.image.img}}"
+            srcset="
+            {{#event.image.images}}
+                img/venues/optimized/{{{img}}} {{width}}w, 
+            {{/event.image.images}}
+            " sizes="(max-width: 480px) 95vw, (min-width: 768px) 50vw, (min-width: 992px) 40vw"
+             alt="{{title}}" />
         </div>
         <div class="col-md-6">
             <div class="card-body">

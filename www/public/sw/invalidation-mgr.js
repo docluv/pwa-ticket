@@ -69,19 +69,23 @@ class InvalidationManager {
 
                         cache.match(request).then(response => {
 
-                            let date = new Date(response.headers.get("date")),
-                                current = new Date(Date.now());
+                            if (response) {
 
-                            //300 === 5 minutes
-                            //3600 === 1 Hour
-                            //86400 === 1 day
-                            //604800 === 1 week
+                                let date = new Date(response.headers.get("date")),
+                                    current = new Date(Date.now());
 
-                            if (!DateManager.compareDates(current,
-                                    DateManager.addSecondsToDate(date,
-                                        rule.strategyOptions.ttl))) {
+                                //300 === 5 minutes
+                                //3600 === 1 Hour
+                                //86400 === 1 day
+                                //604800 === 1 week
 
-                                cache.delete(request);
+                                if (!DateManager.compareDates(current,
+                                        DateManager.addSecondsToDate(date,
+                                            rule.strategyOptions.ttl))) {
+
+                                    cache.delete(request);
+
+                                }
 
                             }
 

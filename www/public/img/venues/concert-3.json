@@ -1,0 +1,24 @@
+{
+    "image": {
+        "img": "img/concert-3-1360x922.jpg",
+        "width": 1360,
+        "height": 922
+    },
+    "images": [{
+        "img": "img/concert-3-1360x922.jpg",
+        "width": 1360,
+        "height": 922
+    }, {
+        "img": "img/concert-3-474x322.jpg",
+        "width": 474,
+        "height": 322
+    }, {
+        "img": "img/concert-3-460x312.jpg",
+        "width": 460,
+        "height": 312
+    }, {
+        "img": "img/concert-3-320x217.jpg",
+        "width": 320,
+        "height": 217
+    }]
+}

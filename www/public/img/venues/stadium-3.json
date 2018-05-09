@@ -1,0 +1,28 @@
+{
+    "image": {
+        "img": "img/stadium-3-1000x618.jpg",
+        "width": 1000,
+        "height": 618
+    },
+    "images": [{
+        "img": "img/stadium-3-1000x618.jpg",
+        "width": 1000,
+        "height": 618
+    }, {
+        "img": "img/stadium-3-474x293.jpg",
+        "width": 474,
+        "height": 293
+    }, {
+        "img": "img/stadium-3-474x293.jpg",
+        "width": 474,
+        "height": 293
+    }, {
+        "img": "img/stadium-3-460x285.jpg",
+        "width": 460,
+        "height": 285
+    }, {
+        "img": "img/stadium-3-320x198.jpg",
+        "width": 320,
+        "height": 198
+    }]
+}
