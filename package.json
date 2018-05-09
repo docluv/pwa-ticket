@@ -20,6 +20,8 @@
         "strip-bom": "*",
         "mkdirp": "*",
         "qr-encode": "*",
+        "uglify": "*",
+        "uncss": "*",
         "ba64": "*"
     }
 }
