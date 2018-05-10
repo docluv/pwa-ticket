@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}\\utils\\generate-fake-data.js",
+            "program": "${workspaceFolder}\\utils\\render-public.js",
             "cwd": "${workspaceRoot}\\utils",
         }
     ]

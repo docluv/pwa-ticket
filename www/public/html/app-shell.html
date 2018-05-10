@@ -174,58 +174,8 @@
         </div>
     </footer>
 
-    <script type="script-polyfil" id="polyfilassign" src="js/libs/polyfils/object.assign.js"></script>
-    <script type="script-polyfil" id="polyfilpromise" src="js/libs/polyfils/es6-promise.min.js"></script>
-    <script type="script-polyfil" id="polyfilfetch" src="js/libs/polyfils/fetch.js"></script>
-    <script type="script-polyfil" id="polyfilintersection" src="js/libs/polyfils/intersection-observer.js"></script>
+    <%polyfils%>
 
-    <script>
-        //wrap in IIFE to keep out of global scope
-        (function () {
-
-            function toggleScript(id) {
-
-                var target = document.getElementById("polyfil" + id);
-
-                target.setAttribute("type", "text/javascript");
-
-            }
-
-            if (typeof Object.assign != 'function') {
-
-                toggleScript("assign");
-
-            }
-
-            if (typeof Promise === "undefined" || Promise.toString().indexOf("[native code]") === -1) {
-
-                toggleScript("promise");
-
-            }
-
-            if (typeof fetch === "undefined" || fetch.toString().indexOf("[native code]") === -1) {
-
-                toggleScript("fetch");
-
-            }
-
-            if (typeof IntersectionObserver === "undefined" || IntersectionObserver.toString().indexOf("[native code]") === -1) {
-
-                toggleScript("polyfilintersection");
-
-            }
-
-        }());
-    </script>
-
-    <script src="js/libs/utils.js"></script>
-    <script src="js/libs/lazy.images.js"></script>
-    <script src="js/libs/localforage.min.js"></script>
-    <script src="js/libs/mustache.min.js"></script>
-    <script src="js/libs/utils.js"></script>
-    <script src="js/app/libs/api.js"></script>
-    <script src="js/app/libs/push-mgr.js"></script>
-    <script src="js/app/app.js"></script>
     {{#scripts}}
     <script src="{{{.}}}"></script>
     {{/scripts}}

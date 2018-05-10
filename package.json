@@ -20,8 +20,10 @@
         "strip-bom": "*",
         "mkdirp": "*",
         "qr-encode": "*",
-        "uglify": "*",
+        "uglify-js": "*",
         "uncss": "*",
-        "ba64": "*"
+        "ba64": "*",
+        "cheerio": "*",
+        "clean-css": "*"
     }
 }

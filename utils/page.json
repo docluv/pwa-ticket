@@ -1,0 +1,14 @@
+{
+    "scripts": ["js/libs/utils.js",
+        "js/libs/lazy.images.js",
+        "js/libs/localforage.min.js",
+        "js/libs/mustache.min.js",
+        "js/libs/utils.js",
+        "js/app/libs/api.js",
+        "js/app/libs/push-mgr.js",
+        "js/app/app.js"
+    ],
+    "css": ["css/libs/bootstrap.min.css",
+        "css/app/site.css"
+    ]
+}

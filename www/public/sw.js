@@ -8,7 +8,7 @@ self.importScripts("js/libs/localforage.min.js",
     "sw/date-mgr.js"
 );
 
-const version = "1.08",
+const version = "1.07",
     preCache = "PRECACHE-" + version,
     dynamicCache = "DYNAMIC-" + version,
     eventsCacheName = "events-cache-" + version,
@@ -17,7 +17,7 @@ const version = "1.08",
         "/",
         "img/pwa-tickets-logo-320x155.png",
         "js/app/app.js",
-        "js/app/libs/lazy.images.js",
+        "js/libs/lazy.images.js",
         "js/app/libs/api.js",
         "js/app/libs/push-mgr.js",
         "js/app/pages/cart.js",

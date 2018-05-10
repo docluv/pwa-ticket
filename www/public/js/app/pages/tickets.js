@@ -27,6 +27,8 @@
                             tickets: tickets
                         });
 
+                        lazyImages.lazyDisplay();
+
                     });
 
             }

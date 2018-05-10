@@ -14,6 +14,8 @@
 
                         target.innerHTML = Mustache.render(template, token);
 
+                        lazyImages.lazyDisplay();
+
                     });
 
             }

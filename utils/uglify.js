@@ -1,7 +1,7 @@
 const UglifyJS = require("uglify-js"),
     fs = require("fs"),
     path = require("path"),
-    srcPath = "",
+    srcFiles = [],
     uglifyOptions = {
         parse: {
             html5_comments: false,
@@ -20,7 +20,17 @@ class uglify {
 
         if (src && src !== "") {
 
-            srcPath = path.resolve(src);
+            if(!Array.isArray(src)){
+
+                src = [src];
+
+            }
+
+            src.forEach((item, index) => {
+
+                srcFiles[index] = path.resolve(item);
+
+            });
 
         }
 
@@ -32,9 +42,9 @@ class uglify {
 
         srcFiles.forEach(element => {
 
-            let source = fs.readFileSync(path.join(srcPath, element), utf8);
+            let source = fs.readFileSync(element, utf8);
 
-            src[path.basename(element), source];
+            src[path.basename(element).replace(/\./g, "")] = source;
 
         });
 
@@ -42,12 +52,14 @@ class uglify {
 
     }
 
-    minify(srcFiles) {
+    minify() {
 
         let src = this.transformSrc(srcFiles);
 
-        return UglifyJS.minify(src, options);
+        return UglifyJS.minify(src, uglifyOptions);
 
     }
 
 }
+
+exports.uglify = uglify;
