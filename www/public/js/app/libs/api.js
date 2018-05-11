@@ -205,13 +205,15 @@ var pwaTicketAPI = (function () {
 
         getEvent: function (id, future) {
 
+            var timeFrame;
+
             if (future === undefined) {
 
                 future = true;
 
             }
 
-            let timeFrame = future ? "futureEvents/" : "pastEvents/";
+            timeFrame = future ? "futureEvents/" : "pastEvents/";
 
             return fetch(api + timeFrame + id)
                 .then(function (response) {

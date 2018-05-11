@@ -30,6 +30,10 @@
 
             });
 
+    }else{
+
+        lazyImages.lazyDisplay();
+
     }
 
 })();

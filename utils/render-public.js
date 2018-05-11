@@ -13,10 +13,9 @@ var utils = require("./utils"),
     publicPath = "../www/public/",
     scriptsObjs = [],
     scripts = ["js/app/app.js",
-        "js/app/libs/push-mgr.js",
-        "js/libs/lazy.images.js",
         "js/app/libs/api.js",
         "js/app/libs/push-mgr.js",
+        "js/libs/lazy.images.js",
         "js/app/pages/cart.js",
         "js/app/pages/config.js",
         "js/app/pages/contact.js",
@@ -54,8 +53,6 @@ function loadTemplates() {
     fs.readdirSync(templatePath).forEach(file => {
 
         if (file !== "event-page.html") {
-
-            console.log(file);
 
             templates += fs.readFileSync(path.resolve(templatePath, file), utf8);
 
@@ -139,8 +136,6 @@ function renderPage(page) {
 
     pageObj = mergePage(pageObj);
 
-    //    console.log(pageObj);
-
     pageHTML = appShell.replace("<%template%>", body);
     pageSlug = path.resolve("", slug);
 
@@ -163,7 +158,13 @@ function renderPage(page) {
 
         html = injectScripts(pageObj, html);
 
+        html = replaceScriptsWithHashes(html);
+
         utils.createFile(path.resolve(publicPath, slug, "index.html"), html, true);
+
+        html = html.replace(/<div class=\"loader\"><\/div>/g, "<%template%>");
+
+        utils.createFile(path.resolve(publicPath, "templates/" + slug + "-page.html"), html, true);
 
     });
 
@@ -205,8 +206,6 @@ function injectScripts(pageObj, html) {
 
         let scriptName = getScriptHash(script);
 
-        console.log(scriptName);
-
         pageScripts += '<script src="' + scriptName + '"></script>';
 
     });
@@ -247,11 +246,15 @@ function uglifyScripts() {
 
         let ug = new uglify(path.resolve(publicPath, script));
 
+        console.log(script);
+
         let min = ug.minify();
 
         if (min.code && min.code !== "") {
 
             let hashName = utils.getHash(min.code);
+
+            console.log(script + " " + hashName);
 
             fs.writeFileSync(path.join(publicPath, path.dirname(script), hashName + ".min.js"), min.code);
 
@@ -259,12 +262,40 @@ function uglifyScripts() {
                 src: script,
                 hash: hashName + ".min.js"
             });
+        } else {
+            console.log("uglify error ", min.error);
         }
 
     });
 
 }
 
+function renderServiceWorker() {
+
+    let sw = fs.readFileSync(path.resolve(publicPath, "templates/sw.js"), utf8);
+
+    fs.writeFileSync(path.join(publicPath, "sw.js"), replaceScriptsWithHashes(sw), utf8);
+
+}
+
+function replaceScriptsWithHashes(src) {
+
+    for (let i = 0; i < scriptsObjs.length; i++) {
+
+        let scriptName = path.basename(scriptsObjs[i].src);
+
+        src = src.replace(scriptName, scriptsObjs[i].hash)
+            .replace(scriptName, scriptsObjs[i].hash);
+
+    }
+
+    return src;
+
+}
+
+
 uglifyScripts();
 
 readPageFiles();
+
+renderServiceWorker();

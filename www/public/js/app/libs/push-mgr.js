@@ -9,7 +9,7 @@
 
             askPermission: function () {
                 return new Promise(function (resolve, reject) {
-                    const permissionResult = Notification.requestPermission(function (result) {
+                    var permissionResult = Notification.requestPermission(function (result) {
                         resolve(result);
                     });
 
@@ -82,16 +82,16 @@
             },
 
             urlB64ToUint8Array: function (base64String) {
-                //assume const support if push is supported ;)
-                const padding = '='.repeat((4 - base64String.length % 4) % 4);
-                const base64 = (base64String + padding)
+                //assume var support if push is supported ;)
+                var padding = '='.repeat((4 - base64String.length % 4) % 4);
+                var base64 = (base64String + padding)
                     .replace(/\-/g, '+')
                     .replace(/_/g, '/');
 
-                const rawData = window.atob(base64);
-                const outputArray = new Uint8Array(rawData.length);
+                var rawData = window.atob(base64);
+                var outputArray = new Uint8Array(rawData.length);
 
-                for (let i = 0; i < rawData.length; ++i) {
+                for (var i = 0; i < rawData.length; ++i) {
                     outputArray[i] = rawData.charCodeAt(i);
                 }
                 return outputArray;
