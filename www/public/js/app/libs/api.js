@@ -294,18 +294,11 @@ var pwaTicketAPI = (function () {
             return localforage.getItem(authToken)
                 .then(function (token) {
 
-                    //temporary
-                    //                token = "e2beca0c-609d-4b0b-a2ba-bf42b6194f06";
-
                     if (token) {
 
                         pwaTicketAPI.token = token;
 
                         return token;
-
-                        // } else {
-
-                        //     window.location = "login/";
 
                     } else {
 

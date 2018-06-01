@@ -1,7 +1,7 @@
 (function () {
 
-    return pwaTicketAPI.verifyToken()
-        .then(function (token) {
+return pwaTicketAPI.verifyToken()
+    .then(function (token) {
 
             pwaTicketAPI.loadTemplate("templates/event-list.html")
                 .then(function (template) {

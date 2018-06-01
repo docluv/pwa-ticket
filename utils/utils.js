@@ -13,12 +13,12 @@ var glob = require("glob"),
 
 module.exports = {
 
-    getHash: function (data) {
-        var md5 = crypto.createHash('md5');
-        md5.update(data);
+getHash: function (data) {
+    var md5 = crypto.createHash('md5');
+    md5.update(data);
 
-        return md5.digest('hex');
-    },
+    return md5.digest('hex');
+},
 
     unixifyPath: function (filepath) {
         if (isWindows) {
