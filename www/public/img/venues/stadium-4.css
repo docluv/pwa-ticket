@@ -1,6 +1,0 @@
-body{ background: url(/img/stadium-4-1000x636.jpg); background-size: cover;}
-@media (min-width: 1000px){ body { background: url(/img/stadium-4-1000x636.jpg);} }
-@media (min-width: 474px){ body { background: url(/img/stadium-4-474x302.jpg);} }
-@media (min-width: 474px){ body { background: url(/img/stadium-4-474x302.jpg);} }
-@media (min-width: 460px){ body { background: url(/img/stadium-4-460x293.jpg);} }
-@media (min-width: 320px){ body { background: url(/img/stadium-4-320x204.jpg);} }

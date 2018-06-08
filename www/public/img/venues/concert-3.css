@@ -1,4 +1,0 @@
-body{ background: url(/img/concert-3-474x322.jpg); background-size: cover;}
-@media (min-width: 474px){ body { background: url(/img/concert-3-474x322.jpg);} }
-@media (min-width: 460px){ body { background: url(/img/concert-3-460x312.jpg);} }
-@media (min-width: 320px){ body { background: url(/img/concert-3-320x217.jpg);} }

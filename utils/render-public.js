@@ -7,8 +7,6 @@ var utils = require("./utils"),
     cheerio = require("cheerio"),
     uncss = require('uncss'),
     CleanCSS = require('clean-css'),
-    urls = [],
-    siteURLS = [],
     templates = "", //contact templates to this string
     publicPath = "../www/public/",
     scriptsObjs = [],
@@ -33,9 +31,7 @@ var utils = require("./utils"),
     utf8 = 'utf-8',
     appShell = "",
     polyfils = "",
-    pageJSON = {},
-    css = "",
-    target = process.argv[2];
+    pageJSON = {};
 
 function loadAppShell() {
 
@@ -127,7 +123,7 @@ function renderPage(page) {
     let body = fs.readFileSync(path.resolve(page), utf8),
         slug = path.basename(page, ".html"),
         pageObj = utils.readJSON(path.resolve("public/" + slug + ".json")),
-        pageHTML, pageSlug,
+        pageHTML,
         name = slug;
 
     if (slug === "home") {
