@@ -8,7 +8,7 @@ self.importScripts("js/libs/2ae25530a0dd28f30ca44f5182f0de61.min.js",
     "sw/date-mgr.js"
 );
 
-const version = "1.08",
+const version = "1.10",
     preCache = "PRECACHE-" + version,
     dynamicCache = "DYNAMIC-" + version,
     eventsCacheName = "events-cache-" + version,
@@ -163,21 +163,19 @@ function handleResponse(event) {
 
     switch (rule.strategy) {
 
-    case "cacheFallingBackToNetwork":
+        case "cacheFallingBackToNetwork":
 
-        return responseManager.cacheFallingBackToNetworkCache(event.request, cacheName);
-
-        break;
+            return responseManager.cacheFallingBackToNetworkCache(event.request, cacheName);
 
         case "fetchAndRenderResponseCache":
 
             return responseManager.fetchAndRenderResponseCache({
-                request: event.request,
-                pageURL: rule.options.pageURL,
-                template: rule.options.template,
-                api: rule.options.api,
-                cacheName: cacheName    
-            })
+                    request: event.request,
+                    pageURL: rule.options.pageURL,
+                    template: rule.options.template,
+                    api: rule.options.api,
+                    cacheName: cacheName
+                })
                 .then(response => {
 
                     invalidationManager.cacheCleanUp(cacheName);
@@ -185,8 +183,6 @@ function handleResponse(event) {
                     return response;
 
                 });
-
-            break;
 
         case "cacheOnly":
 
@@ -199,27 +195,22 @@ function handleResponse(event) {
 
                 });
 
-            break;
-
         case "networkOnly":
 
             return responseManager.networkOnly(event.request);
 
-            break;
+        case "cacheFallingBackToNetworkCache":
+        default:
 
-    case "cacheFallingBackToNetworkCache":
-    default:
+            return responseManager.cacheFallingBackToNetworkCache(event.request, cacheName)
+                .then(response => {
 
-        return responseManager.cacheFallingBackToNetworkCache(event.request, cacheName)
-            .then(response => {
+                    invalidationManager.cacheCleanUp(cacheName);
 
-                invalidationManager.cacheCleanUp(cacheName);
+                    return response;
 
-                return response;
+                });
 
-            });
-
-        break;
     }
 
 }
