@@ -1,8 +1,11 @@
 body {
-    font-family: /* 1 */
-    -apple-system, BlinkMacSystemFont, /* 2 */
-    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", /* 3 */
-    "Helvetica Neue", sans-serif;
+    font-family:
+        /* 1 */
+        -apple-system, BlinkMacSystemFont,
+        /* 2 */
+        "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        /* 3 */
+        "Helvetica Neue", sans-serif;
     font-size: 16pt;
     line-height: 1.5;
     color: #333;
@@ -55,7 +58,7 @@ body {
     align-content: center;
 }
 
-.session-actions{
+.session-actions {
     height: 40px;
     width: 100%;
     position: relative;
@@ -64,12 +67,12 @@ body {
     justify-content: flex-end;
 }
 
-.session-actions [type=radio]+label, 
-.session-actions [type=checkbox]+label{
+.session-actions [type=radio]+label,
+.session-actions [type=checkbox]+label {
     font-size: 1em;
 }
 
-.session-actions [type=checkbox]+label:before{
+.session-actions [type=checkbox]+label:before {
     border-color: #005c84;
 }
 
@@ -92,6 +95,7 @@ body {
     0% {
         -webkit-transform: rotate(0deg);
     }
+
     100% {
         -webkit-transform: rotate(360deg);
     }
@@ -101,6 +105,7 @@ body {
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
@@ -121,6 +126,7 @@ body {
         bottom: -100px;
         opacity: 0
     }
+
     to {
         bottom: 0px;
         opacity: 1
@@ -132,6 +138,7 @@ body {
         bottom: -100px;
         opacity: 0
     }
+
     to {
         bottom: 0;
         opacity: 1
@@ -142,7 +149,7 @@ body {
 
 .navigation-panel::-webkit-scrollbar {
     display: none;
-    }
+}
 
 .navigation-panel {
     background: #005c84;
@@ -182,7 +189,7 @@ body {
     margin-right: 1rem;
 }
 
-.navbar-logo{
+.navbar-logo {
     max-width: 124px;
 }
 
@@ -192,7 +199,10 @@ body {
 }
 
 
-.footer a, .footer a:hover, .footer a:visited, .footer a:active {
+.footer a,
+.footer a:hover,
+.footer a:visited,
+.footer a:active {
     color: #fff;
 }
 
@@ -205,11 +215,21 @@ body {
     margin-top: 3%;
 }
 
-.main-footer h1, .main-footer h2, .main-footer h3, .main-footer h4 {
+.main-footer h1,
+.main-footer h2,
+.main-footer h3,
+.main-footer h4 {
     color: #fff;
 }
 
-.main-footer a, .main-footer a:active, .main-footer a:hover, .main-footer .nav>li>a, .main-footer .nav>li>a:active, .main-footer .nav>li>a:hover, .main-footer .nav>li>a:hover, .main-footer .nav>li>a:focus {
+.main-footer a,
+.main-footer a:active,
+.main-footer a:hover,
+.main-footer .nav>li>a,
+.main-footer .nav>li>a:active,
+.main-footer .nav>li>a:hover,
+.main-footer .nav>li>a:hover,
+.main-footer .nav>li>a:focus {
     color: #fff;
     background-color: transparent;
 }
@@ -226,11 +246,11 @@ body {
     margin: 2% 0;
 }
 
-.page-content .ticket-card{
+.page-content .ticket-card {
     width: 98%;
 }
 
-.ticket-barcode{
+.ticket-barcode {
     max-width: 380px;
 }
 
@@ -239,22 +259,23 @@ body {
         width: 46%;
     }
 
-    .page-content .ticket-card{
+    .page-content .ticket-card {
         width: 98%;
     }
-    
+
 }
 
 @media (min-width: 992px) {
 
-    .authenticated .navbar-expand-lg .navbar-collapse, 
-    .authenticated .navbar-collapse{
-        display: flex!important;
+    .authenticated .navbar-expand-lg .navbar-collapse,
+    .authenticated .navbar-collapse {
+        display: flex !important;
     }
-    
+
     .session-detail {
         padding: 1%;
     }
+
     .navigation-panel {
         position: fixed;
         top: 100px;
@@ -263,19 +284,19 @@ body {
         padding-top: 1%;
     }
 
-    .page-content .content-target{
-        width:98%;
-    }   
+    .page-content .content-target {
+        width: 98%;
+    }
 
     .page-content .card {
         width: 30%;
     }
 
 
-    .page-content .ticket-card{
+    .page-content .ticket-card {
         width: 98%;
     }
-    
+
 }
 
 /* search */

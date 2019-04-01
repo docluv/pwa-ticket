@@ -1,6 +1,6 @@
-"use strict"; //https://love2dev.com/blog/javascript-strict-mode/
+( function () {
 
-(function () {
+    "use strict"; //https://love2dev.com/blog/javascript-strict-mode/
 
     var eventListTemplate,
         ticketListTemplate,
@@ -8,16 +8,16 @@
 
     window.pwaTickets = {
 
-        getParameterByName: function (name, url) {
-            if (!url) {
+        getParameterByName: function ( name, url ) {
+            if ( !url ) {
                 url = window.location.href;
             }
-            name = name.replace(/[\[\]]/g, "\\$&");
-            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, " "));
+            name = name.replace( /[\[\]]/g, "\\$&" );
+            var regex = new RegExp( "[?&]" + name + "(=([^&#]*)|&|#|$)" ),
+                results = regex.exec( url );
+            if ( !results ) return null;
+            if ( !results[ 2 ] ) return '';
+            return decodeURIComponent( results[ 2 ].replace( /\+/g, " " ) );
         }
 
     };
@@ -26,23 +26,23 @@
     // Menu toggle
     function initMenuToggle() {
 
-        var toggler = _d.qs(".navbar-toggler");
+        var toggler = _d.qs( ".navbar-toggler" );
 
-        toggler.addEventListener("click", function (evt) {
+        toggler.addEventListener( "click", function ( evt ) {
 
             toggleMenu();
 
-        });
+        } );
 
     }
 
     function toggleMenu() {
         /* Choose 992 because that is the break point where BS hides the menu toggle button */
-        if (document.body.clientWidth < 992) {
+        if ( document.body.clientWidth < 992 ) {
 
-            var navbarNav = document.getElementById("navbarNav");
+            var navbarNav = document.getElementById( "navbarNav" );
 
-            navbarNav.classList.toggle("show");
+            navbarNav.classList.toggle( "show" );
 
         }
 
@@ -50,9 +50,9 @@
 
     function initLogout() {
 
-        var logoutBtn = _d.qs(".logout-btn");
+        var logoutBtn = _d.qs( ".logout-btn" );
 
-        logoutBtn.addEventListener("click", function (evt) {
+        logoutBtn.addEventListener( "click", function ( evt ) {
 
             evt.preventDefault();
 
@@ -60,7 +60,7 @@
 
             return false;
 
-        });
+        } );
 
     }
 
@@ -69,53 +69,53 @@
     /* search */
     function initSearch() {
 
-        pwaTicketAPI.loadTemplate("templates/event-list.html")
-            .then(function (template) {
+        pwaTicketAPI.loadTemplate( "templates/event-list.html" )
+            .then( function ( template ) {
 
-                if (template) {
+                if ( template ) {
 
                     eventListTemplate = template;
 
-                    var searchBox = _d.qs(".search-input");
+                    var searchBox = _d.qs( ".search-input" );
 
-                    searchBox.addEventListener("keyup", function (evt) {
+                    searchBox.addEventListener( "keyup", function ( evt ) {
 
                         evt.preventDefault();
 
-                        if (searchBox.value.length > 3 || evt.keyCode === 13) {
+                        if ( searchBox.value.length > 3 || evt.keyCode === 13 ) {
 
                             //search events & tickets
-                            pwaTicketAPI.searchFutureEvents(searchBox.value)
-                                .then(function (events) {
+                            pwaTicketAPI.searchFutureEvents( searchBox.value )
+                                .then( function ( events ) {
 
-                                    var target = _d.qs(".content-target");
+                                    var target = _d.qs( ".content-target" );
 
-                                    target.innerHTML = Mustache.render(eventListTemplate, {
+                                    target.innerHTML = Mustache.render( eventListTemplate, {
                                         events: events
-                                    });
+                                    } );
 
-                                });
+                                } );
 
                         }
 
                         return false;
 
-                    });
+                    } );
 
                 }
 
-            })
-            .catch(function (err) {
+            } )
+            .catch( function ( err ) {
 
-                console.log(err);
+                console.log( err );
 
-            });
+            } );
 
     }
 
-    function renderSearchResults(results) {
+    function renderSearchResults( results ) {
 
-        var target = _d.qs(".page-content");
+        var target = _d.qs( ".page-content" );
 
         // target.innerHTML = Mustache.render(sessionCardTemplate, {
         //     sessions: results
@@ -125,42 +125,42 @@
 
     function loadSearchTemplates() {
 
-        pwaTicketAPI.fetchTemplate("templates/event-list")
-            .then(function (template) {
+        pwaTicketAPI.fetchTemplate( "templates/event-list" )
+            .then( function ( template ) {
 
-                if (template) {
+                if ( template ) {
 
                     eventListTemplate = template;
 
                 }
 
                 return;
-            });
+            } );
 
-        pwaTicketAPI.fetchTemplate("templates/ticket-list")
-            .then(function (template) {
+        pwaTicketAPI.fetchTemplate( "templates/ticket-list" )
+            .then( function ( template ) {
 
-                if (template) {
+                if ( template ) {
 
                     ticketListTemplate = template;
 
                 }
 
                 return;
-            });
+            } );
 
     }
 
     function initializeApp() {
 
-        if (window.location.href.indexOf("login") === -1) {
+        if ( window.location.href.indexOf( "login" ) === -1 ) {
 
             pwaTicketAPI.verifyToken()
-                .then(function (token) {
+                .then( function ( token ) {
 
-                    if (token) {
+                    if ( token ) {
 
-                        document.body.classList.add("authenticated");
+                        document.body.classList.add( "authenticated" );
 
                         initSearch();
                         initMenuToggle();
@@ -171,7 +171,7 @@
                         window.location.href = "login";
                     }
 
-                });
+                } );
 
         }
 
@@ -182,19 +182,19 @@
     /*
         register the service worker
     */
-    if ('serviceWorker' in navigator) {
+    if ( 'serviceWorker' in navigator ) {
 
-        navigator.serviceWorker.register('/sw.js').then(function (registration) {
+        navigator.serviceWorker.register( '/sw.js' ).then( function ( registration ) {
             // Registration was successful
 
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            console.log( 'ServiceWorker registration successful with scope: ', registration.scope );
 
-        }).catch(function (err) {
+        } ).catch( function ( err ) {
             // registration failed :(
 
-            console.log('ServiceWorker registration failed: ', err);
-        });
+            console.log( 'ServiceWorker registration failed: ', err );
+        } );
 
     }
 
-})();
+} )();

@@ -60,8 +60,8 @@
 
     <div class="navbar navbar-expand-lg navbar-light bg-light fixed-top " role="navigation">
         <div class="navbar-header">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
@@ -205,35 +205,35 @@
 
     <script>
         //wrap in IIFE to keep out of global scope
-        (function () {
+        ( function () {
 
-            function toggleScript(id) {
+            function toggleScript( id ) {
 
-                var target = document.getElementById("polyfil" + id);
+                var target = document.getElementById( "polyfil" + id );
 
-                target.setAttribute("type", "text/javascript");
-
-            }
-
-            if (typeof Object.assign != 'function') {
-
-                toggleScript("assign");
+                target.setAttribute( "type", "text/javascript" );
 
             }
 
-            if (typeof Promise === "undefined" || Promise.toString().indexOf("[native code]") === -1) {
+            if ( typeof Object.assign != 'function' ) {
 
-                toggleScript("promise");
-
-            }
-
-            if (typeof fetch === "undefined" || fetch.toString().indexOf("[native code]") === -1) {
-
-                toggleScript("fetch");
+                toggleScript( "assign" );
 
             }
 
-        }());
+            if ( typeof Promise === "undefined" || Promise.toString().indexOf( "[native code]" ) === -1 ) {
+
+                toggleScript( "promise" );
+
+            }
+
+            if ( typeof fetch === "undefined" || fetch.toString().indexOf( "[native code]" ) === -1 ) {
+
+                toggleScript( "fetch" );
+
+            }
+
+        }() );
     </script>
 
     <script src="js/libs/utils.js"></script>
