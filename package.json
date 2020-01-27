@@ -11,17 +11,16 @@
     "author": "Chris Love",
     "private": true,
     "devDependencies": {
-        "json-server": "*",
-        "http-server": "*",
-        "mustache": "*",
+        "ba64": "*",
         "faker": "*",
-        "glob": "*",
-        "lodash": "*",
-        "strip-bom": "*",
+        "glob": "^7.1.4",
+        "json-server": "^0.15.1",
+        "lodash": "^4.17.15",
         "mkdirp": "*",
+        "mustache": "^3.1.0",
         "qr-encode": "*",
+        "strip-bom": "^4.0.0",
         "uglify": "*",
-        "uncss": "*",
-        "ba64": "*"
+        "uncss": "*"
     }
 }
