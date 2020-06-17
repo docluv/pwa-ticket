@@ -58,3 +58,4 @@ typings/
 .env
 
 /www/public/barcodes
+/package-lock.json
